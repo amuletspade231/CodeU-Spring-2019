@@ -19,11 +19,19 @@ public class StatsPageServlet extends HttpServlet{
   private Datastore datastore;
 
   @Override
+  /**
+   * Called automatically once when the servlet is first created, 
+   * to create and store a Datastore instance.
+   */
   public void init() {
     datastore = new Datastore();
   }
   
   @Override
+  /**
+   * On page /stats, gets total message count from the datastore and outputs it
+   * as bare-bones JSON format: {"messageCount": messageCount}.
+   */
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException {
     
