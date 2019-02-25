@@ -68,7 +68,6 @@ public class Datastore {
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
-        throw e;
       }
     }
 
@@ -101,7 +100,7 @@ public class Datastore {
    * @return a list of messages posted by all users, or empty list if all users have never posted a
    *     message. List is sorted by time descending.
    */
-  public List<Message> getMessages() {
+  public List<Message> getAllMessages() {
     List<Message> messages = new ArrayList<>();
 
     Query query =
