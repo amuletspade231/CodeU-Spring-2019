@@ -50,16 +50,9 @@ public class Datastore {
   /**
    * Loads in messages from the query into a list
    *
-<<<<<<< HEAD
    * @return a list of messages stored in the query, or empty list if the query is empty. List is sorted by time descending.
    */
   public List<Message> loadMessages(PreparedQuery results) {
-=======
-   * @return a list of messages posted by the user(s), or empty list if user has never posted a
-   *     message. List is sorted by time descending.
-   */
-  public List<Message> loadMessages(PreparedQuery results) throws Exception{
->>>>>>> ae8d02c13ee017f2738b7d26a2ebb81a1f11197d
     List<Message> messages = new ArrayList<>();
 
     for (Entity entity : results.asIterable()) {
@@ -97,15 +90,7 @@ public class Datastore {
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
-<<<<<<< HEAD
     messages = loadMessages(results);
-=======
-    try {
-      messages = loadMessages(results);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
->>>>>>> ae8d02c13ee017f2738b7d26a2ebb81a1f11197d
 
     return messages;
   }
@@ -121,22 +106,10 @@ public class Datastore {
 
     Query query =
         new Query("Message")
-<<<<<<< HEAD
             .addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
     messages = loadMessages(results);
-=======
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-            .addSort("timestamp", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
-
-    try {
-      messages = loadMessages(results);
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
->>>>>>> ae8d02c13ee017f2738b7d26a2ebb81a1f11197d
 
     return messages;
   }
