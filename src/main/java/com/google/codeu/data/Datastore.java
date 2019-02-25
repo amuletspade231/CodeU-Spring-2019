@@ -68,7 +68,7 @@ public class Datastore {
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
-        e.printStackTrace();
+        throw e;
       }
     }
 
