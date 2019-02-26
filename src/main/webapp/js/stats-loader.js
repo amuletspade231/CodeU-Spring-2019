@@ -1,3 +1,5 @@
+// Fetches the JSON object containing stats and populates the 
+// stats-container div in stats.html with its contents.
 function fetchStats(){
   const url = '/stats';
   fetch(url).then((response) => {
