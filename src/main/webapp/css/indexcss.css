@@ -12,11 +12,11 @@ nav ul {
 /* Keep navigation menu on one line. */
 nav li {
   display: inline-block;
-  margin-right: 15px
+  margin-right: 20px
 }
 #content{
 	text-align: center;
-	font-size:10px;
+	font-size:17px;
 	font-family: "Comic Sans MS", cursive, sans-serif;
 }
 h1{
