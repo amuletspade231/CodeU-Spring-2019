@@ -28,13 +28,10 @@ public class Message {
   private float sentimentScore;
 
   /**
-   * Constructs a new {@link Message} posted by {@code user} with {@code text} content. 
+   * Constructs a new {@link Message} posted by {@code user} with {@code text} content
+   * and {@code sentimentScore} sentiment scoring of the content. 
    * Generates a random ID and uses the current system time for the creation time.
    */
-  public Message(String user, String text) {
-    this(UUID.randomUUID(), user, text, 0, System.currentTimeMillis());
-  }
-
   public Message(String user, String text, float sentimentScore) {
     this(UUID.randomUUID(), user, text, sentimentScore, System.currentTimeMillis());
   }
