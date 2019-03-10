@@ -26,10 +26,14 @@
       </ul>
     </nav>
     <h1>Team 30 Starter Project</h1>
-    <p>This is the CodeU starter project. Click the links above to login and visit your page.
-       You can post messages on your page, and you can visit other user pages if you have
-       their URL.</p>
-    <p>This is your code now! Feel free to make changes, and don't be afraid to get creative!
-       You could start by modifying this page to tell the world more about your team.</p>
+    <div id="content">
+      <br>
+      <p>Welcome to Team 30's Starter Project page. Our names are DJ, Amanda, Gloria, and Kevin!
+      </p>
+      <p>We designed a basic social media web app for artists to showcase and discuss about their art with other fellow artists as well.</p>
+      <p>Click the links above to login and visit your page.
+      You can post messages on your page, and you can visit other user pages if you have
+      their URL.</p>
+    </div>
   </body>
 </html>
