@@ -21,7 +21,7 @@ public class HomeServlet extends HttpServlet {
     boolean isUserLoggedIn = userService.isUserLoggedIn();
     request.setAttribute("isUserLoggedIn", isUserLoggedIn);
 
-    if (userService.isUserLoggedIn()) {
+    if (isUserLoggedIn) {
       String username = userService.getCurrentUser().getEmail();
       request.setAttribute("username", username);
     }
