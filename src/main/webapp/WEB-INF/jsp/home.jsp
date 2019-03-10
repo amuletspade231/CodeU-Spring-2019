@@ -1,4 +1,4 @@
-<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
+
 
 <!DOCTYPE html>
 <html>
@@ -8,7 +8,8 @@
     <link rel="stylesheet" href="/css/indexcss.css">
   </head>
   <body>
-    <nav>
+    <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+    <%-- <nav>
       <ul id="navigation">
         <li><a href="/home">Home</a></li>
 
@@ -24,7 +25,7 @@
     <% } %>
 
       </ul>
-    </nav>
+    </nav> --%>
     <h1>Team 30 Starter Project</h1>
     <div id="content">
       <br>
