@@ -5,7 +5,7 @@
   <head>
     <meta charset="UTF-8">
     <title>CodeU Starter Project</title>
-    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/indexcss.css">
   </head>
   <body>
     <nav>
