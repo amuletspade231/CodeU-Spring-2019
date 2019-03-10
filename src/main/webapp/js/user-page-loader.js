@@ -74,7 +74,7 @@ function fetchAboutMe(){
   }).then((aboutMe) => {
     const aboutMeContainer = document.getElementById('about-me-container');
     if(aboutMe == ''){
-      aboutMe = 'This user has not entered any information yet.';
+      aboutMe = 'Enter information about yourself.';
     }
     
     aboutMeContainer.innerHTML = aboutMe;
@@ -92,7 +92,9 @@ function buildMessageDiv(message) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
   headerDiv.appendChild(document.createTextNode(
-      message.user + ' - ' + new Date(message.timestamp)));
+      message.user + ' - ' + 
+      new Date(message.timestamp) +
+      ' [' + message.sentimentScore + ']'));
 
   const bodyDiv = document.createElement('div');
   bodyDiv.classList.add('message-body');

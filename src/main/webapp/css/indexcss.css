@@ -1,0 +1,25 @@
+body {
+  background-color: #b3ccff; 
+  background-image: linear-gradient(to right, #33adff, #80ccff,  #99d6ff,  #ccebff); 
+}
+
+/* Remove bullet points from navigation bar. */
+nav ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+/* Keep navigation menu on one line. */
+nav li {
+  display: inline-block;
+  margin-right: 20px
+}
+#content{
+	text-align: center;
+	font-size:17px;
+	font-family: "Comic Sans MS", cursive, sans-serif;
+}
+h1{
+	text-align: center;
+  font-family: "Comic Sans MS", cursive, sans-serif;
+}
