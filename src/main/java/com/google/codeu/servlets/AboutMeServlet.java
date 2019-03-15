@@ -10,6 +10,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.User;
+import com.google.codeu.data.RegexExample;
 
 /**
  * Handles fetching and saving user data.
