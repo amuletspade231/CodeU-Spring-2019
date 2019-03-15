@@ -17,6 +17,9 @@
 google.charts.load('current', {packages: ['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
+/**
+ * Builds a chart element and adds it to the page.
+ */
 function drawChart(){
   var sentiment_data = new google.visualization.DataTable();
   //define columns for the DataTable instance
