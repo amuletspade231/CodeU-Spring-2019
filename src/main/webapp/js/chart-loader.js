@@ -20,7 +20,7 @@ google.charts.setOnLoadCallback(drawChart);
 /**
  * Builds a chart element and adds it to the page.
  */
-function drawChart(){
+function drawChart() {
   var sentiment_data = new google.visualization.DataTable();
   //define columns for the DataTable instance
   sentiment_data.addColumn('string', 'Date');
@@ -43,3 +43,15 @@ function drawChart(){
 
   chart.draw(sentiment_data, chart_options);
 }
+
+function fetchMessageData() {
+  fetch("/charts")
+      .then((response) => {
+        return response.json();
+      })
+      .then((msgJson) => {
+        console.log(msgJson);
+      });
+}
+
+fetchMessageData();
