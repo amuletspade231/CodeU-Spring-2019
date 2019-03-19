@@ -21,29 +21,33 @@ google.charts.setOnLoadCallback(drawChart);
  * Builds a chart element and adds it to the page.
  */
 function drawChart() {
-  var sentiment_data = new google.visualization.DataTable();
+  let sentiment_data = new google.visualization.DataTable();
   //define columns for the DataTable instance
   sentiment_data.addColumn('string', 'Date');
   sentiment_data.addColumn('number', 'Average Sentiment');
 
   //add data to sentiment_data
   sentiment_data.addRows([
-      ["March 1", -0.5],
-      ["March 6", -0.3],
-      ["March 11", 0.9],
-      ["March 16", 0.5],
+    ["March 1", -0.5],
+    ["March 6", -0.3],
+    ["March 11", 0.9],
+    ["March 16", 0.5],
   ]);
-  var chart = new google.visualization.LineChart(document.getElementById('chart-container'));
-  var chart_options = {
-                        width: 800,
-                        height: 400,
-                        title: "Average Sentiment",
-                        curveType: "function"
-                      };
+  let chart = new google.visualization.LineChart(document.getElementById('chart-container'));
+  const chart_options = {
+    width: 800,
+    height: 400,
+    title: "Average Sentiment",
+    curveType: "function"
+  };
 
   chart.draw(sentiment_data, chart_options);
 }
 
+/*
+ * Fetches the JSON from the /charts path and populates
+ * the chart-container div in chart.html with its data.
+ */
 function fetchMessageData() {
   fetch("/charts")
       .then((response) => {
