@@ -109,17 +109,18 @@ public class Datastore {
    * Gets messages posted by a specific user.
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
-   *     message. List is sorted by time descending.
+   *     message. List is sorted by time descending. If user is null, return
+   *     all messages in the Datastore.
    */
   public List<Message> getMessages(String user) {
     List<Message> messages = new ArrayList<>();
+    Query query = new Query("Message");
 
-    Query query =
-        new Query("Message")
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-            .addSort("timestamp", SortDirection.DESCENDING);
+    if (user != null) {
+      query.setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user));
+    }
+    query.addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
-
     messages = loadMessages(results);
 
     return messages;
