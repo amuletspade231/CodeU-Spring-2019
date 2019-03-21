@@ -12,7 +12,7 @@ public class RegexExample {
    String youtube_replacement = "<iframe width=\"560\" height=\"315\" "+
    "src=\"https://www.youtube.com/embed/$2\" frameborder=\"0\" "+
    "allow=\"accelerometer; autoplay; encrypted-media; gyroscope; "+
-   "picture-in-picture\" allowfullscreen></iframe>"
+   "picture-in-picture\" allowfullscreen></iframe>";
 
     String result = text.replaceAll(youtube_regex, youtube_replacement);
     System.out.println(result);
