@@ -42,6 +42,7 @@ public class Datastore {
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
+    messageEntity.setProperty("sentimentScore", message.getSentimentScore());
     messageEntity.setProperty("timestamp", message.getTimestamp());
 
     datastore.put(messageEntity);
@@ -61,9 +62,10 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
+        float sentimentScore = ((Double) entity.getProperty("sentimentScore")).floatValue();
         long timestamp = (long) entity.getProperty("timestamp");
 
-        Message message = new Message(id, user, text, timestamp);
+        Message message = new Message(id, user, text, sentimentScore, timestamp);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -74,7 +76,7 @@ public class Datastore {
 
     return messages;
   }
-  
+
     /** Stores the User in Datastore. */
    public void storeUser(User user) {
     Entity userEntity = new Entity("User", user.getEmail());
@@ -82,13 +84,13 @@ public class Datastore {
     userEntity.setProperty("aboutMe", user.getAboutMe());
     datastore.put(userEntity);
    }
-   
+
    /**
     * Returns the User owned by the email address, or
     * null if no matching User was found.
     */
    public User getUser(String email) {
-   
+
     Query query = new Query("User")
       .setFilter(new Query.FilterPredicate("email", FilterOperator.EQUAL, email));
     PreparedQuery results = datastore.prepare(query);
@@ -96,10 +98,10 @@ public class Datastore {
     if(userEntity == null) {
      return null;
     }
-    
+
     String aboutMe = (String) userEntity.getProperty("aboutMe");
     User user = new User(email, aboutMe);
-    
+
     return user;
    }
 
@@ -107,17 +109,18 @@ public class Datastore {
    * Gets messages posted by a specific user.
    *
    * @return a list of messages posted by the user, or empty list if user has never posted a
-   *     message. List is sorted by time descending.
+   *     message. List is sorted by time descending. If user is null, return
+   *     all messages in the Datastore.
    */
   public List<Message> getMessages(String user) {
     List<Message> messages = new ArrayList<>();
+    Query query = new Query("Message");
 
-    Query query =
-        new Query("Message")
-            .setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user))
-            .addSort("timestamp", SortDirection.DESCENDING);
+    if (user != null) {
+      query.setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user));
+    }
+    query.addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
-
     messages = loadMessages(results);
 
     return messages;

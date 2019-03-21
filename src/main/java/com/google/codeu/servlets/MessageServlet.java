@@ -18,6 +18,10 @@ package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.cloud.language.v1.Document;
+import com.google.cloud.language.v1.Document.Type;
+import com.google.cloud.language.v1.LanguageServiceClient;
+import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.gson.Gson;
@@ -76,6 +80,7 @@ public class MessageServlet extends HttpServlet {
     }
 
     String user = userService.getCurrentUser().getEmail();
+
     //String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
     //Message message = new Message(user, text);
@@ -86,12 +91,31 @@ public class MessageServlet extends HttpServlet {
 
     String replacement = "<img src=\"$1\" />";
 
+    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    float sentimentScore = getSentimentScore(text);
+    
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
-
-    Message message = new Message(user, textWithImagesReplaced);
+    
+    Message message = new Message(user, text,textWithImagesReplaced);
 
     datastore.storeMessage(message);
 
     response.sendRedirect("/user-page.html?user=" + user);
+  }
+
+  /**
+   * Analyzes a message's text for its positive/negative sentiment.
+   *
+   * @return the sentiment score of the message
+   */
+  private float getSentimentScore(String text) throws IOException {
+    Document doc = Document.newBuilder()
+        .setContent(text).setType(Type.PLAIN_TEXT).build();
+
+    LanguageServiceClient languageService = LanguageServiceClient.create();
+    Sentiment sentiment = languageService.analyzeSentiment(doc).getDocumentSentiment();
+    languageService.close();
+
+    return sentiment.getScore();
   }
 }
