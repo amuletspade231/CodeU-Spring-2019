@@ -58,7 +58,7 @@ public class MessageServlet extends HttpServlet {
 
     if (user == null || user.equals("")) {
       // Request is invalid, return empty array
-      response.getWriter().println("[]");
+      response.getWriter().println("[This is null... Are you logged in?]");
       return;
     }
 
@@ -82,7 +82,7 @@ public class MessageServlet extends HttpServlet {
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
     float sentimentScore = getSentimentScore(text);
-    
+
     Message message = new Message(user, text, sentimentScore);
     datastore.storeMessage(message);
 
