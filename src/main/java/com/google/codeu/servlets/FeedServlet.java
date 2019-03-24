@@ -41,6 +41,11 @@ public class FeedServlet extends HttpServlet{
     boolean isUserLoggedIn = userService.isUserLoggedIn();
     request.setAttribute("isUserLoggedIn", isUserLoggedIn);
 
+    if (isUserLoggedIn) {
+      String user = userService.getCurrentUser().getEmail();
+      request.setAttribute("user", user);
+    }
+
     //response.setContentType("application/json");
 
     List<Message> messages = datastore.getAllMessages();
