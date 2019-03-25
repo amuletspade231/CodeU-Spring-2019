@@ -50,11 +50,27 @@ function drawChart() {
  */
 function fetchMessageData() {
   fetch("/charts")
-      .then((response) => {
-        return response.json();
-      })
-      .then((msgJson) => {
-        console.log(msgJson);
+    .then((response) => {
+      return response.json();
+    })
+    .then((msgJson) => {
+      let msgData = new google.visualization.DataTable();
+      //define columns for the DataTable instance
+      msgData.addColumn('date', 'Date');
+      msgData.addColumn('number', 'Message Count');
+
+      for (i = 0; i < msgJson.length; i++) {
+          msgRow = [];
+          let timestampAsDate = new Date(msgJson[i].timestamp);
+          let totalMessages = i + 1;
+          //TODO add the formatted values to msgRow array by using JS' push method
+
+          //console.log(msgRow);
+          msgData.addRow(msgRow);
+
+      }
+      //console.log(msgData);
+      drawChart(msgData);
       });
 }
 
