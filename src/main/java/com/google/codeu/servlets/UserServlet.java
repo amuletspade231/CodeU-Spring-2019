@@ -40,7 +40,6 @@ public class UserServlet extends HttpServlet {
     String user = requestUrl.substring("/users/".length());
 
     if (user == null || user.equals("")) {
-		  //request.getRequestDispatcher("/jsp/home.jsp").forward(request,response);
 	    response.getWriter().println(user + " is null");
       return;
     }

@@ -53,18 +53,18 @@ public class AboutMeServlet extends HttpServlet{
 
   UserService userService = UserServiceFactory.getUserService();
   if (!userService.isUserLoggedIn()) {
-   	//response.sendRedirect("/home");
-		response.getWriter().println("User is not logged in");
+   	response.sendRedirect("/home");
    	return;
   }
 
   String userEmail = userService.getCurrentUser().getEmail();
+	System.out.println(userEmail);
 
   String aboutMe = request.getParameter("about-me");
 
     User user = new User(userEmail, aboutMe);
     datastore.storeUser(user);
 
-    //response.sendRedirect("/users/" + userEmail);
+    response.sendRedirect("/users/" + userEmail);
   }
 }
