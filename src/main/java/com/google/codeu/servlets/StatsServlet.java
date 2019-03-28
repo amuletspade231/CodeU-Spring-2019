@@ -1,10 +1,12 @@
 package com.google.codeu.servlets;
 
-import com.google.gson.JsonObject;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
 
 import java.io.IOException;
 
+import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +15,8 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * A servlet for handling fetching site statistics.
  */
-@WebServlet("/stats-json")
-public class StatsPageServlet extends HttpServlet{
+@WebServlet("/stats")
+public class StatsServlet extends HttpServlet{
 
   private Datastore datastore;
 
@@ -33,14 +35,18 @@ public class StatsPageServlet extends HttpServlet{
    * as bare-bones JSON format: {"messageCount": messageCount}.
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response)
-    throws IOException {
+    throws IOException, ServletException {
 
-    response.setContentType("application/json");
+    UserService userService = UserServiceFactory.getUserService();
 
-    int messageCount = datastore.getTotalMessageCount();
+    boolean isUserLoggedIn = userService.isUserLoggedIn();
+    request.setAttribute("isUserLoggedIn", isUserLoggedIn);
 
-    JsonObject jsonObject = new JsonObject();
-    jsonObject.addProperty("messageCount", messageCount);
-    response.getOutputStream().println(jsonObject.toString());
+    if (isUserLoggedIn) {
+      String user = userService.getCurrentUser().getEmail();
+      request.setAttribute("user", user);
+    }
+
+    request.getRequestDispatcher("/jsp/stats.jsp").forward(request,response);
   }
 }

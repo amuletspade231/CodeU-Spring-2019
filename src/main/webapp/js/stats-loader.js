@@ -1,7 +1,7 @@
-// Fetches the JSON object containing stats and populates the 
+// Fetches the JSON object containing stats and populates the
 // stats-container div in stats.html with its contents.
 function fetchStats(){
-  const url = '/stats';
+  const url = '/stats-json';
   fetch(url).then((response) => {
     return response.json();
   }).then((stats) => {

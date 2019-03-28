@@ -9,7 +9,7 @@
 %>
     <li><a href="/users/<%= user %>">Your Page</a></li>
     <li><a href="/feed">Public Feed</a></li>
-    <li><a href="/stats.html">Statistics</a></li>
+    <li><a href="/stats">Statistics</a></li>
     <li><a href="/logout">Logout</a></li>
 <% } else {   %>
    <li><a href="/login">Login</a></li>
