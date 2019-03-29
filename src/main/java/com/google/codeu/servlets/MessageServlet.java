@@ -87,12 +87,22 @@ public class MessageServlet extends HttpServlet {
 
     String replacement = "<img src=\"$1\" />";
 
-    float sentimentScore = getSentimentScore(text);
+    String youtube_regex = "(https://www.youtube.com/watch\\?v=(\\S*))";
+    String youtube_replacement = "<iframe width=\"560\" height=\"315\" "+
+   "src=\"https://www.youtube.com/embed/$2\" frameborder=\"0\" "+
+   "allow=\"accelerometer; autoplay; encrypted-media; gyroscope; "+
+   "picture-in-picture\" allowfullscreen></iframe>";
+
+    String result = userText.replaceAll(youtube_regex, youtube_replacement);
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+    float sentimentScore = getSentimentScore(textWithImagesReplaced);
+    float sentimentScoreYT= getSentimentScore(result);
     
     Message message = new Message(user, textWithImagesReplaced, sentimentScore);
+    Message messageYT = new Message(user, result, sentimentScoreYT);
 
     datastore.storeMessage(message);
+    datastore.storeMessage(messageYT);
 
     response.sendRedirect("/user-page.html?user=" + user);
   }
