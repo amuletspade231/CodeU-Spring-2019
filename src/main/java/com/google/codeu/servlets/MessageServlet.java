@@ -24,6 +24,7 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.RegexExample;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -96,15 +97,19 @@ public class MessageServlet extends HttpServlet {
 
     String result = userText.replaceAll(youtube_regex, youtube_replacement);
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
-    float sentimentScore = getSentimentScore(textWithImagesReplaced);
-    float sentimentScoreYT= getSentimentScore(result);
+    float sentimentScore;
+
+    if(userText.equals(result)){
+      sentimentScore = getSentimentScore(textWithImagesReplaced);
+      Message message = new Message(user, textWithImagesReplaced, sentimentScore);
+      datastore.storeMessage(message);
+    }
+    else{
+      sentimentScore= getSentimentScore(result);
+      Message message = new Message(user, result, sentimentScore);
+      datastore.storeMessage(message);
+    }
     
-    Message message = new Message(user, textWithImagesReplaced, sentimentScore);
-    Message messageYT = new Message(user, result, sentimentScoreYT);
-
-    datastore.storeMessage(message);
-    datastore.storeMessage(messageYT);
-
     response.sendRedirect("/user-page.html?user=" + user);
   }
 

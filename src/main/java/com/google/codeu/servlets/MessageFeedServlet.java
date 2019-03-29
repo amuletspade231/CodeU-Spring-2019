@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.RegexExample;
 import com.google.gson.Gson;
 
 /**
