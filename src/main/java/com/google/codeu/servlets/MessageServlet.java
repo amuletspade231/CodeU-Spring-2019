@@ -87,6 +87,7 @@ public class MessageServlet extends HttpServlet {
 
     String replacement = "<img src=\"$1\" />";
 
+
     String youtube_regex = "(https://www.youtube.com/watch\\?v=(\\S*))";
     String youtube_replacement = "<iframe width=\"560\" height=\"315\" "+
    "src=\"https://www.youtube.com/embed/$2\" frameborder=\"0\" "+
