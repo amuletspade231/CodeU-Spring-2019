@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Handles fetching all messages for the public feed.
+ * Handles fetching all messages for the public feed on the server side.
  */
 @WebServlet("/feed")
 public class FeedServlet extends HttpServlet{
@@ -28,7 +28,7 @@ public class FeedServlet extends HttpServlet{
   }
 
  /**
-  * Responds with a JSON representation of Message data for all users.
+  * Fetches Message data for all users and forwards it to the public feed JSP file.
   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -47,6 +47,6 @@ public class FeedServlet extends HttpServlet{
     List<Message> messages = datastore.getAllMessages();
     request.setAttribute("messages", messages);
 
-    request.getRequestDispatcher("/jsp/feed.jsp").forward(request,response);
+    request.getRequestDispatcher("/WEB-INF/jsp/feed.jsp").forward(request,response);
   }
 }

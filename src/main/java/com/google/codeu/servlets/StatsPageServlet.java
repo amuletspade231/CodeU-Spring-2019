@@ -29,7 +29,7 @@ public class StatsPageServlet extends HttpServlet{
 
   @Override
   /**
-   * On page /stats, gets total message count from the datastore and outputs it
+   * On page /stats-json, gets total message count from the datastore and outputs it
    * as bare-bones JSON format: {"messageCount": messageCount}.
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response)

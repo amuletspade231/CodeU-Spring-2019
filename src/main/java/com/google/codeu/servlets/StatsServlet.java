@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * A servlet for handling fetching site statistics.
+ * A servlet for handling forwarding the request to the statistics JSP page.
  */
 @WebServlet("/stats")
 public class StatsServlet extends HttpServlet{
@@ -31,8 +31,8 @@ public class StatsServlet extends HttpServlet{
 
   @Override
   /**
-   * On page /stats, gets total message count from the datastore and outputs it
-   * as bare-bones JSON format: {"messageCount": messageCount}.
+   * On page /stats, gets user info from the user service factory and adds it
+   * to a request that gets forwarded to the statistics JSP page.
    */
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
@@ -47,6 +47,6 @@ public class StatsServlet extends HttpServlet{
       request.setAttribute("user", user);
     }
 
-    request.getRequestDispatcher("/jsp/stats.jsp").forward(request,response);
+    request.getRequestDispatcher("/WEB-INF/jsp/stats.jsp").forward(request,response);
   }
 }

@@ -58,7 +58,7 @@ public class MessageServlet extends HttpServlet {
 
     if (user == null || user.equals("")) {
       // Request is invalid, return empty array
-      response.getWriter().println("This is null... Are you logged in?");
+      response.getWriter().println("[]");
       return;
     }
 

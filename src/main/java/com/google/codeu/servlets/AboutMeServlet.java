@@ -17,12 +17,12 @@ import com.google.codeu.data.User;
 
 @WebServlet("/about")
 public class AboutMeServlet extends HttpServlet{
-	private Datastore datastore;
+  private Datastore datastore;
 
-	@Override
-		public void init() {
-		datastore = new Datastore();
-	}
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
 
  /**
   * Responds with the "about me" section for a particular user.
@@ -31,14 +31,14 @@ public class AboutMeServlet extends HttpServlet{
  public void doGet(HttpServletRequest request, HttpServletResponse response)
    throws IOException {
 
-	  response.setContentType("text/html");
+    response.setContentType("text/html");
 
-	  String user = request.getParameter("user");
+    String user = request.getParameter("user");
 
-	  if(user == null || user.equals("")) {
-	   // Request is invalid, return empty response
-	   return;
-	  }
+    if(user == null || user.equals("")) {
+     // Request is invalid, return empty response
+     return;
+    }
     User userData = datastore.getUser(user);
     if(userData == null || userData.getAboutMe() == null) {
       return;
@@ -58,7 +58,7 @@ public class AboutMeServlet extends HttpServlet{
   }
 
   String userEmail = userService.getCurrentUser().getEmail();
-	System.out.println(userEmail);
+  System.out.println(userEmail);
 
   String aboutMe = request.getParameter("about-me");
 

@@ -15,15 +15,24 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/*
+ * Handles fetching and saving user data from the server side and forwarding
+ * the request to the user JSP page.
+ */
 @WebServlet("/users/*")
 public class UserServlet extends HttpServlet {
-	private Datastore datastore;
+  private Datastore datastore;
 
-	@Override
-		public void init() {
-		datastore = new Datastore();
-	}
+  @Override
+  public void init() {
+    datastore = new Datastore();
+  }
 
+  /*
+   * On page /users/<username>, gets user info from the user service factory
+   * and datastore. Then, it adds all data to a request that gets forwarded to
+   * the user JSP page.
+   */
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response)
     throws IOException, ServletException {
@@ -40,16 +49,16 @@ public class UserServlet extends HttpServlet {
     String user = requestUrl.substring("/users/".length());
 
     if (user == null || user.equals("")) {
-	    response.getWriter().println(user + " is null");
+      response.getWriter().println(user + " is null");
       return;
     }
-		request.setAttribute("user", user);
+    request.setAttribute("user", user);
 
     // Fetch user messages
 
     List<Message> messages = datastore.getMessages(user);
     request.setAttribute("messages", messages);
 
-    request.getRequestDispatcher("/jsp/user-page.jsp").forward(request,response);
+    request.getRequestDispatcher("/WEB-INF/jsp/user-page.jsp").forward(request,response);
   }
 }

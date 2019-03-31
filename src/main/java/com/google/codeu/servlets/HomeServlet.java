@@ -28,6 +28,6 @@ public class HomeServlet extends HttpServlet {
       request.setAttribute("user", user);
     }
 
-    request.getRequestDispatcher("/jsp/index.jsp").forward(request,response);
+    request.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(request,response);
   }
 }
