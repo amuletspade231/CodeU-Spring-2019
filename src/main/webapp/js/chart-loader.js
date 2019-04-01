@@ -50,7 +50,7 @@ function fetchMessageData() {
       for (i = 0; i < msgJson.length; i++) {
           msgRow = [];
           let timestampAsDate = new Date(msgJson[i].timestamp);
-          let totalMessages = i + 1;
+          let totalMessages = msgJson.length - i + 1;
           msgRow.push(timestampAsDate, totalMessages)
           msgData.addRow(msgRow);
 
