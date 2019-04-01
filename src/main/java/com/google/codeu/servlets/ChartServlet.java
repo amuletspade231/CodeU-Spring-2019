@@ -16,14 +16,17 @@
 
  package com.google.codeu.servlets;
 
- import com.google.gson.JsonObject;
+ import com.google.appengine.api.users.UserService;
+ import com.google.appengine.api.users.UserServiceFactory;
  import com.google.codeu.data.Datastore;
  import com.google.codeu.data.Message;
  import com.google.gson.Gson;
+ import com.google.gson.JsonObject;
 
  import java.io.IOException;
  import java.util.List;
 
+ import javax.servlet.ServletException;
  import javax.servlet.annotation.WebServlet;
  import javax.servlet.http.HttpServlet;
  import javax.servlet.http.HttpServletRequest;
@@ -48,15 +51,24 @@
 
    @Override
    /**
-    * Converts the returned value to JSON and prints the JSON out as a response.
     *
-    * @return a list of all of the messages
     */
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      response.setContentType("application/json");
-      List<Message> msgList = datastore.getMessages(null);
-      Gson gson = new Gson();
-      String json = gson.toJson(msgList);
-      response.getWriter().println(json);
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+      throws IOException, ServletException {
+
+      UserService userService = UserServiceFactory.getUserService();
+
+      boolean isUserLoggedIn = userService.isUserLoggedIn();
+      request.setAttribute("isUserLoggedIn", isUserLoggedIn);
+
+      if (isUserLoggedIn) {
+        String user = userService.getCurrentUser().getEmail();
+        request.setAttribute("user", user);
+      }
+
+      List<Message> messages = datastore.getAllMessages();
+      request.setAttribute("messages", messages);
+
+      request.getRequestDispatcher("/WEB-INF/jsp/chart.jsp").forward(request,response);
    }
  }
