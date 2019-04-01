@@ -34,6 +34,8 @@ function drawChart(dataTable) {
 /*
  * Fetches the JSON from the /charts path and populates
  * the chart-container div in chart.html with its data.
+ *
+ * Creates a line chart displaying the message count over time.
  */
 function fetchMessageData() {
   fetch("/charts")
@@ -42,7 +44,6 @@ function fetchMessageData() {
     })
     .then((msgJson) => {
       let msgData = new google.visualization.DataTable();
-      //define columns for the DataTable instance
       msgData.addColumn('date', 'Date');
       msgData.addColumn('number', 'Message Count');
 
@@ -50,7 +51,6 @@ function fetchMessageData() {
           msgRow = [];
           let timestampAsDate = new Date(msgJson[i].timestamp);
           let totalMessages = i + 1;
-          //TODO add the formatted values to msgRow array by using JS' push method
           msgRow.push(timestampAsDate, totalMessages)
           msgData.addRow(msgRow);
 
