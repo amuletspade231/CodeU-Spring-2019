@@ -15,7 +15,7 @@ import com.google.gson.Gson;
 /**
  * Handles fetching all messages for the public feed.
  */
-@WebServlet("/feed")
+@WebServlet("/feed-json")
 public class MessageFeedServlet extends HttpServlet{
 
   private Datastore datastore;
