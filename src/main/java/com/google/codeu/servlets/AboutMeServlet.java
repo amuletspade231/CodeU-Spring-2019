@@ -33,13 +33,13 @@ public class AboutMeServlet extends HttpServlet{
 
     response.setContentType("text/html");
 
-    String user = request.getParameter("user");
+    String username = request.getParameter("username");
 
-    if(user == null || user.equals("")) {
+    if(username == null || username.equals("")) {
      // Request is invalid, return empty response
      return;
     }
-    User userData = datastore.getUser(user);
+    User userData = datastore.getUser(username);
     if(userData == null || userData.getAboutMe() == null) {
       return;
     }

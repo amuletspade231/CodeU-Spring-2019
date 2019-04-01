@@ -42,17 +42,21 @@ public class UserServlet extends HttpServlet {
 
     boolean isUserLoggedIn = userService.isUserLoggedIn();
     request.setAttribute("isUserLoggedIn", isUserLoggedIn);
+    if (isUserLoggedIn) {
+      String user = userService.getCurrentUser().getEmail();
+      request.setAttribute("user", user);
+    }
 
     // Confirm that user is valid
 
     String requestUrl = request.getRequestURI();
-    String user = requestUrl.substring("/users/".length());
+    String username = requestUrl.substring("/users/".length());
 
     if (user == null || user.equals("")) {
       response.getWriter().println(user + " is null");
       return;
     }
-    request.setAttribute("user", user);
+    request.setAttribute("username", username);
 
     // Fetch user messages
 
