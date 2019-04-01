@@ -67,9 +67,6 @@
         request.setAttribute("user", user);
       }
 
-      List<Message> messages = datastore.getAllMessages();
-      request.setAttribute("messages", messages);
-
       request.getRequestDispatcher("/WEB-INF/jsp/chart.jsp").forward(request,response);
    }
  }

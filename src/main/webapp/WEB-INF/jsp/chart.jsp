@@ -18,15 +18,15 @@ limitations under the License.
 <html>
 
   <head>
-    <title>A New Chart</title>
+    <title>Charts</title>
     <link rel="stylesheet" href="/css/main.css">
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript" src="/js/chart-loader.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/js/chart-loader.js"></script>
   </head>
 
   <body onload="buildUI()">
     <%@include file="/WEB-INF/jspf/navigation.jspf" %>
-    <h1 id="page-title">Chart Project</h1>
+    <h1 id="page-title">Total Messages Over Time</h1>
     <div id="chart-container"></div>
   </body>
 

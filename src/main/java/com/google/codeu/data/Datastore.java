@@ -106,11 +106,9 @@ public class Datastore {
    }
 
   /**
-   * Gets messages posted by a specific user.
+   * Gets messages posted by a user, or all messages if user is null.
    *
-   * @return a list of messages posted by the user, or empty list if user has never posted a
-   *     message. List is sorted by time descending. If user is null, return
-   *     all messages in the Datastore.
+   * @return a list of any messages posted by the user, sorted by time descending. If user is null, returns all messages in the Datastore.
    */
   public List<Message> getMessages(String user) {
     List<Message> messages = new ArrayList<>();
@@ -129,10 +127,10 @@ public class Datastore {
   /**
    * Gets messages posted by all users.
    *
-   * @return a list of messages posted by all users so far,
-   * sorted by time descending.
+   * @return a list of messages posted by all users so far, sorted by time descending.
    */
   public List<Message> getAllMessages() {
+    // calling getMessages with a null user returns all messages in datastore
     return getMessages(null);
   }
 
