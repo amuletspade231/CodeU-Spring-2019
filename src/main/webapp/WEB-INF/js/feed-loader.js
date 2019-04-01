@@ -1,7 +1,7 @@
 
 // Fetch messages and add them to the page.
 function fetchMessages(){
-  const url = '/feed';
+  const url = '/feed-json';
   fetch(url).then((response) => {
     return response.json();
   }).then((messages) => {

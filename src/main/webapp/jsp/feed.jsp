@@ -7,11 +7,7 @@
     <script src="/js/feed-loader.js"></script>
   </head>
   <body onload="buildUI()">
-    <nav>
-      <ul id="navigation">
-        <li><a href="/home">Home</a></li>
-      </ul>
-    </nav>
+      <%@include file="/WEB-INF/jspf/navigation.jspf" %>
     <div id="content">
       <h1>Message Feed</h1>
       <hr/>

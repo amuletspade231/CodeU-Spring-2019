@@ -1,0 +1,19 @@
+<% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
+<nav>
+  <ul id="navigation">
+    <li><a href="/home">Home</a></li>
+
+<%
+  if (isUserLoggedIn) {
+    String user = (String) request.getAttribute("user");
+%>
+    <li><a href="/users/<%= user %>">Your Page</a></li>
+    <li><a href="/feed">Public Feed</a></li>
+    <li><a href="/stats">Statistics</a></li>
+    <li><a href="/logout">Logout</a></li>
+<% } else {   %>
+   <li><a href="/login">Login</a></li>
+<% } %>
+
+  </ul>
+</nav>
