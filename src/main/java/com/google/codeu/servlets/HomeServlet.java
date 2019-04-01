@@ -1,13 +1,15 @@
 package com.google.codeu.servlets;
 
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
+
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import com.google.appengine.api.users.UserService;
-import com.google.appengine.api.users.UserServiceFactory;
 
 @WebServlet("/home")
 public class HomeServlet extends HttpServlet {
@@ -22,10 +24,10 @@ public class HomeServlet extends HttpServlet {
     request.setAttribute("isUserLoggedIn", isUserLoggedIn);
 
     if (isUserLoggedIn) {
-      String username = userService.getCurrentUser().getEmail();
-      request.setAttribute("username", username);
+      String user = userService.getCurrentUser().getEmail();
+      request.setAttribute("user", user);
     }
 
-    request.getRequestDispatcher("/WEB-INF/jsp/home.jsp").forward(request,response);
+    request.getRequestDispatcher("/WEB-INF/jsp/index.jsp").forward(request,response);
   }
 }
