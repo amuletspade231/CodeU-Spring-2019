@@ -15,33 +15,20 @@
  */
 
 google.charts.load('current', {packages: ['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+google.charts.setOnLoadCallback(fetchMessageData);
 
 /**
  * Builds a chart element and adds it to the page.
  */
-function drawChart() {
-  let sentimentData = new google.visualization.DataTable();
-  //define columns for the DataTable instance
-  sentimentData.addColumn('string', 'Date');
-  sentimentData.addColumn('number', 'Average Sentiment');
-
-  //add data to sentimentData
-  sentimentData.addRows([
-    ["March 1", -0.5],
-    ["March 6", -0.3],
-    ["March 11", 0.9],
-    ["March 16", 0.5],
-  ]);
+function drawChart(dataTable) {
   let chart = new google.visualization.LineChart(document.getElementById('chart-container'));
   const chartOptions = {
     width: 800,
     height: 400,
-    title: "Average Sentiment",
     curveType: "function"
   };
 
-  chart.draw(sentimentData, chartOptions);
+  chart.draw(dataTable, chartOptions);
 }
 
 /*
@@ -64,12 +51,10 @@ function fetchMessageData() {
           let timestampAsDate = new Date(msgJson[i].timestamp);
           let totalMessages = i + 1;
           //TODO add the formatted values to msgRow array by using JS' push method
-
-          //console.log(msgRow);
+          msgRow.push(timestampAsDate, totalMessages)
           msgData.addRow(msgRow);
 
       }
-      //console.log(msgData);
       drawChart(msgData);
       });
 }
