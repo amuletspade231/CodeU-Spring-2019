@@ -38,7 +38,7 @@ function drawChart(dataTable) {
  * Creates a line chart displaying the message count over time.
  */
 function fetchMessageData() {
-  fetch("/charts")
+  fetch("/feed-json")
     .then((response) => {
       return response.json();
     })
@@ -59,4 +59,7 @@ function fetchMessageData() {
     });
 }
 
-fetchMessageData();
+// Fetch data and populate the UI of the page.
+function buildUI() {
+  fetchMessageData();
+}
