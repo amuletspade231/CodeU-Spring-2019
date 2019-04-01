@@ -129,20 +129,11 @@ public class Datastore {
   /**
    * Gets messages posted by all users.
    *
-   * @return a list of messages posted by all users, or empty list if all users have never posted a
-   *     message. List is sorted by time descending.
+   * @return a list of messages posted by all users so far,
+   * sorted by time descending.
    */
   public List<Message> getAllMessages() {
-    List<Message> messages = new ArrayList<>();
-
-    Query query =
-        new Query("Message")
-            .addSort("timestamp", SortDirection.DESCENDING);
-    PreparedQuery results = datastore.prepare(query);
-
-    messages = loadMessages(results);
-
-    return messages;
+    return getMessages(null);
   }
 
   /**

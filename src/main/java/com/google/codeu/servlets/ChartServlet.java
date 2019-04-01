@@ -51,7 +51,8 @@
 
    @Override
    /**
-    *
+    * For page /charts, generates a request with current user and login status,
+    * and forwards that request to chart.jsp
     */
     public void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException, ServletException {
