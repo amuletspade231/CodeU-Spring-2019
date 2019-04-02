@@ -6,6 +6,9 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.Optional;
+
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
@@ -24,12 +27,12 @@ public class AboutMeServlet extends HttpServlet{
     datastore = new Datastore();
   }
 
- /**
+  /**
   * Responds with the "about me" section for a particular user.
   */
- @Override
- public void doGet(HttpServletRequest request, HttpServletResponse response)
-   throws IOException {
+  @Override
+  public void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws IOException {
 
     response.setContentType("text/html");
 
@@ -47,22 +50,20 @@ public class AboutMeServlet extends HttpServlet{
     response.getOutputStream().println(userData.getAboutMe());
   }
 
- @Override
- public void doPost(HttpServletRequest request, HttpServletResponse response)
-   throws IOException {
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response)
+    throws IOException {
 
-  UserService userService = UserServiceFactory.getUserService();
-  if (!userService.isUserLoggedIn()) {
-   	response.sendRedirect("/home");
-   	return;
-  }
+    UserService userService = UserServiceFactory.getUserService();
+    if (!userService.isUserLoggedIn()) {
+     	response.sendRedirect("/home");
+     	return;
+    }
 
-  String userEmail = userService.getCurrentUser().getEmail();
-  System.out.println(userEmail);
+    String userEmail = userService.getCurrentUser().getEmail();
+    String aboutMe = request.getParameter("about-me");
+    User user = new User(userEmail, aboutMe, Optional.of(false));
 
-  String aboutMe = request.getParameter("about-me");
-
-    User user = new User(userEmail, aboutMe);
     datastore.storeUser(user);
 
     response.sendRedirect("/users/" + userEmail);
