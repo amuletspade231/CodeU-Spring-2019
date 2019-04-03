@@ -10,7 +10,12 @@
     <%@include file="/WEB-INF/jspf/navigation.jspf" %>
     <div id="outercontainer">
     <h1 id="page-title">User Page</h1>
-
+    <div id="commissions-toggle" class="hidden">
+      <label class="switch">
+        <input type="checkbox">
+        <span class="slider"></span>
+      </label>
+    </div>
     <div id="about-me-container">Loading...</div>
       <div id="about-me-form" class="hidden">
       <form action="/about" method="POST">
