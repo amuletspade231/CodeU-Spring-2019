@@ -52,15 +52,15 @@ public class UserServlet extends HttpServlet {
     String requestUrl = request.getRequestURI();
     String username = requestUrl.substring("/users/".length());
 
-    if (user == null || user.equals("")) {
-      response.getWriter().println(user + " is null");
+    if (username == null || username.equals("")) {
+      response.getWriter().println(username + " is null");
       return;
     }
     request.setAttribute("username", username);
 
     // Fetch user messages
 
-    List<Message> messages = datastore.getMessages(user);
+    List<Message> messages = datastore.getMessages(username);
     request.setAttribute("messages", messages);
 
     request.getRequestDispatcher("/WEB-INF/jsp/user-page.jsp").forward(request,response);
