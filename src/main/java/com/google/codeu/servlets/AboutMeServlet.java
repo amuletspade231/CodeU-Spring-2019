@@ -36,8 +36,8 @@ public class AboutMeServlet extends HttpServlet{
     String username = request.getParameter("username");
 
     if(username == null || username.equals("")) {
-     // Request is invalid, return empty response
-     return;
+      // Request is invalid, return empty response
+      return;
     }
     User userData = datastore.getUser(username);
     if(userData == null || userData.getAboutMe() == null) {
