@@ -34,11 +34,10 @@ function showMessageFormIfViewingSelf() {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-            loginStatus.username == parameterUsername) {
-          const messageForm = document.getElementById('message-form');
-          messageForm.classList.remove('hidden');
+        if (loginStatus.isLoggedIn && loginStatus.username == parameterUsername) {
+          document.getElementById('message-form').classList.remove('hidden');
           document.getElementById('about-me-form').classList.remove('hidden');
+          document.getElementById('commissions-toggle').classList.remove('hidden');
         }
       });
 }

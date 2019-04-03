@@ -31,12 +31,10 @@ function addLoginOrLogoutLinkToNavigation() {
       })
       .then((loginStatus) => {
         if (loginStatus.isLoggedIn) {
-          window.location.replace('/home');
           navigationElement.appendChild(createListItem(createLink(
               '/users/' + loginStatus.username, 'Your Page')));
           navigationElement.appendChild(createListItem(createLink(
               '/feed', 'Public Feed')));
-
           navigationElement.appendChild(
               createListItem(createLink('/logout', 'Logout')));
         } else {
