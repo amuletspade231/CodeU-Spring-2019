@@ -15,13 +15,9 @@
  */
 
 // Get ?user=XYZ parameter value
-const urlParams = new URLSearchParams(window.location.search);
-const parameterUsername = urlParams.get('user');
-
-// URL must include ?user=XYZ parameter. If not, redirect to homepage.
-if (!parameterUsername) {
-  window.location.replace('/');
-}
+const full_url = new String(window.location.href);
+var prefix = "/users/";
+var parameterUsername = full_url.substring(full_url.indexOf(prefix) + prefix.length);
 
 /** Sets the page title based on the URL parameter username. */
 function setPageTitle() {
@@ -38,11 +34,10 @@ function showMessageFormIfViewingSelf() {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn &&
-            loginStatus.username == parameterUsername) {
-          const messageForm = document.getElementById('message-form');
-          messageForm.classList.remove('hidden');
+        if (loginStatus.isLoggedIn && loginStatus.username == parameterUsername) {
+          document.getElementById('message-form').classList.remove('hidden');
           document.getElementById('about-me-form').classList.remove('hidden');
+          document.getElementById('commissions-toggle').classList.remove('hidden');
         }
       });
 }
@@ -76,7 +71,7 @@ function fetchAboutMe(){
     if(aboutMe == ''){
       aboutMe = 'Enter information about yourself.';
     }
-    
+
     aboutMeContainer.innerHTML = aboutMe;
 
   });
@@ -92,7 +87,7 @@ function buildMessageDiv(message) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
   headerDiv.appendChild(document.createTextNode(
-      message.user + ' - ' + 
+      message.user + ' - ' +
       new Date(message.timestamp) +
       ' [' + message.sentimentScore + ']'));
 

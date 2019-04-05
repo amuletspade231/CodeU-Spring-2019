@@ -15,47 +15,51 @@
  */
 
 google.charts.load('current', {packages: ['corechart']});
-google.charts.setOnLoadCallback(drawChart);
+google.charts.setOnLoadCallback(fetchMessageData);
 
 /**
  * Builds a chart element and adds it to the page.
  */
-function drawChart() {
-  let sentimentData = new google.visualization.DataTable();
-  //define columns for the DataTable instance
-  sentimentData.addColumn('string', 'Date');
-  sentimentData.addColumn('number', 'Average Sentiment');
-
-  //add data to sentimentData
-  sentimentData.addRows([
-    ["March 1", -0.5],
-    ["March 6", -0.3],
-    ["March 11", 0.9],
-    ["March 16", 0.5],
-  ]);
+function drawChart(dataTable) {
   let chart = new google.visualization.LineChart(document.getElementById('chart-container'));
   const chartOptions = {
     width: 800,
     height: 400,
-    title: "Average Sentiment",
     curveType: "function"
   };
 
-  chart.draw(sentimentData, chartOptions);
+  chart.draw(dataTable, chartOptions);
 }
 
 /*
  * Fetches the JSON from the /charts path and populates
  * the chart-container div in chart.html with its data.
+ *
+ * Creates a line chart displaying the message count over time.
  */
 function fetchMessageData() {
-  fetch("/charts")
-      .then((response) => {
-        return response.json();
-      })
-      .then((msgJson) => {
-        console.log(msgJson);
-      });
+  fetch("/feed-json")
+    .then((response) => {
+      return response.json();
+    })
+    .then((msgJson) => {
+      let msgData = new google.visualization.DataTable();
+      msgData.addColumn('date', 'Date');
+      msgData.addColumn('number', 'Message Count');
+
+      for (i = 0; i < msgJson.length; i++) {
+          msgRow = [];
+          let timestampAsDate = new Date(msgJson[i].timestamp);
+          let totalMessages = msgJson.length - i + 1;
+          msgRow.push(timestampAsDate, totalMessages)
+          msgData.addRow(msgRow);
+
+      }
+      drawChart(msgData);
+    });
 }
 
-fetchMessageData();
+// Fetch data and populate the UI of the page.
+function buildUI() {
+  fetchMessageData();
+}

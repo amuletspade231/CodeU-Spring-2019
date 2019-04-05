@@ -31,6 +31,8 @@
       <br>
       <p>Welcome to Team 30's Starter Project page. Our names are DJ, Amanda, Gloria, and Kevin!
       </p>
+      <p>This was loaded by the server! :D
+      </p>
       <p>We designed a basic social media web app for artists to showcase and discuss about their art with other fellow artists as well.</p>
       <p>Click the links above to login and visit your page.
       You can post messages on your page, and you can visit other user pages if you have
