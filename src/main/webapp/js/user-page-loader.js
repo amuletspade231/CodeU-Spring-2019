@@ -15,7 +15,7 @@
  */
 
 // Get ?user=XYZ parameter value
-const full_url = new String(window.location.href);
+const full_url = new String(window.location.href); 
 var prefix = "/users/";
 var parameterUsername = full_url.substring(full_url.indexOf(prefix) + prefix.length);
 

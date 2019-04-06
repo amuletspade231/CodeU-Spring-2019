@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.codeu.servlets;
+package com.google.codeu.servlets; 
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;

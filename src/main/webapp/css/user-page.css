@@ -18,7 +18,7 @@
    and will fill the width of its parent element. */
 #message-input {
   height: 100px;
-  width: 600px;
+  width: 180px;
 }
 
 /* Give each message a rounded border. */
@@ -46,30 +46,114 @@
   display: none;
 }
 #about-input{
-  width: 600px;
+  width: 180px;
 
 }
 #message-container{
-  float: left;
+  width:650px;
 }
 body {
-  background-color: #C4C4E6
+  background-color: #e0e8ef;
+  margin:0;
+  margin-top: 0;
+}
+#dabbletitle{
+  margin:0;
+  padding: 0;
+  opacity: 1;
+  width: 200px;
+  position: relative;
+  top: -25px;
 
 }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
 #outercontainer{
+  width:1000px;
+  margin-left: auto;
+  margin-right: auto;
+}
+#header{
+  margin:0px;
+  width: 100%;
+  background-image:url("https://cdn.trendhunterstatic.com/thumbs/3d-mural-art.jpeg"); 
+  background-size: 150px 150px;
+  height: 280px;
+}
+h1{
+  text-align: center;
+  color: black;
+  font-weight: bold;
+  margin-left: auto;
+  margin-right: auto;
+  margin:0px;
+  width: 200px;
+}
+#sidebar{
+  background-color:#e0e8ef;
+  width:200px;
+  align-items: center;
+  text-align: center;
   float: left;
+  padding:5px;
+  }
+#name{
+  line-height: 100%;
+}
+#profilepic{
+  width:150px;
+  height: 150px;
+  border-color: #cae8f4;
+  border-width: 2px;
+  border-style:solid;
+  border-radius: 50%;
+}
+#textdir{
+  text-align: center;
+  font-size: 30px;
+  padding-top: 40px;
+}
+#maincontent{
+    background-color: white;
+    width:660px;
+    float:left;
+    padding: 15px;
+    height: 100%;
+}
+#naviposts{
+  background-color: white;
+  width: 900px;
+  text-align: center;
+  
+}
+hr{
+  color:#cae8f4;
+}
+#navii{
+  margin:0;
+  padding: 0;
+  position: relative;
+  width: 370px;
+  left: 1000px;
+  top:20px;
+}
+.clear{
+    clear:both;
 }
 
 /* Remove bullet points from navigation bar. */
 nav ul {
   list-style-type: none;
-  padding-left: 0;
+  padding-left:0px;
 }
 
 /* Keep navigation menu on one line. */
 nav li {
   display: inline-block;
-  margin-right: 10px
+  margin-right: 10px;
 }
 
 .message-body img {
