@@ -81,12 +81,13 @@ public class MessageServlet extends HttpServlet {
 
     String user = userService.getCurrentUser().getEmail();
     String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+    String recipient = request.getParameter("recipient");
     float sentimentScore = getSentimentScore(text);
 
-    Message message = new Message(user, text, sentimentScore);
+    Message message = new Message(user, text, recipient, sentimentScore);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/users/" + user);
+    response.sendRedirect("/users/" + recipient);
   }
 
   /**

@@ -43,6 +43,7 @@ public class Datastore {
     Entity messageEntity = new Entity("Message", message.getId().toString());
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
+    messageEntity.setProperty("recipient", message.getRecipient());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
     messageEntity.setProperty("timestamp", message.getTimestamp());
 
@@ -63,10 +64,11 @@ public class Datastore {
         UUID id = UUID.fromString(idString);
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
+        String recipient = (String) entity.getProperty("recipient");
         float sentimentScore = ((Double) entity.getProperty("sentimentScore")).floatValue();
         long timestamp = (long) entity.getProperty("timestamp");
 
-        Message message = new Message(id, user, text, sentimentScore, timestamp);
+        Message message = new Message(id, user, text, recipient, sentimentScore, timestamp);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -113,12 +115,12 @@ public class Datastore {
    *
    * @return a list of any messages posted by the user, sorted by time descending. If user is null, returns all messages in the Datastore.
    */
-  public List<Message> getMessages(String user) {
+  public List<Message> getMessages(String recipient) {
     List<Message> messages = new ArrayList<>();
     Query query = new Query("Message");
 
-    if (user != null) {
-      query.setFilter(new Query.FilterPredicate("user", FilterOperator.EQUAL, user));
+    if (recipient != null) {
+      query.setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient));
     }
     query.addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
