@@ -104,7 +104,7 @@ public class MessageServlet extends HttpServlet {
       Message message = new Message(user, textWithImagesReplaced, sentimentScore);
       datastore.storeMessage(message);
     }
-    else{
+    if(userText.equals(textWithImagesReplaced)){
       sentimentScore= getSentimentScore(result);
       Message message = new Message(user, result, sentimentScore);
       datastore.storeMessage(message);
