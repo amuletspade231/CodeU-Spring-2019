@@ -12,7 +12,7 @@
     <h1 id="page-title">User Page</h1>
     <div id="commissions-toggle" class="hidden">
       <label class="switch">
-        <input type="checkbox">
+        <input type="checkbox" id="commissions-checkbox" onclick="setCommissions()">
         <span class="slider"></span>
       </label>
     </div>

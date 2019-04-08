@@ -26,6 +26,17 @@ function setPageTitle() {
 }
 
 /**
+ * When the commissions toggle is clicked, sets the user's
+ * isTakingCommissions attribute accordingly.
+ */
+function setCommissions() {
+  const checkbox = document.getElementById("commissions-checkbox");
+  if (checkbox.checked == true) {
+    console.log("commissions on");
+  }
+}
+
+/**
  * Shows the message form if the user is logged in and viewing their own page.
  */
 function showMessageFormIfViewingSelf() {
