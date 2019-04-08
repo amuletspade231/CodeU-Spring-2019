@@ -80,7 +80,7 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    String user = userService.getCurrentUser().getEmail();
+    String username = userService.getCurrentUser().getEmail();
 
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
@@ -88,29 +88,20 @@ public class MessageServlet extends HttpServlet {
 
     String replacement = "<img src=\"$1\" />";
 
-
     String youtube_regex = "(https://www.youtube.com/watch\\?v=(\\S*))";
     String youtube_replacement = "<iframe width=\"560\" height=\"315\" "+
    "src=\"https://www.youtube.com/embed/$2\" frameborder=\"0\" "+
    "allow=\"accelerometer; autoplay; encrypted-media; gyroscope; "+
    "picture-in-picture\" allowfullscreen></iframe>";
 
-    String result = userText.replaceAll(youtube_regex, youtube_replacement);
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
-    float sentimentScore;
+    String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
 
-    if(userText.equals(result)){
-      sentimentScore = getSentimentScore(textWithImagesReplaced);
-      Message message = new Message(user, textWithImagesReplaced, sentimentScore);
-      datastore.storeMessage(message);
-    }
-    if(userText.equals(textWithImagesReplaced)){
-      sentimentScore= getSentimentScore(result);
-      Message message = new Message(user, result, sentimentScore);
-      datastore.storeMessage(message);
-    }
-    
-    response.sendRedirect("/users/" + user);
+    float sentimentScore = getSentimentScore(result);
+    Message message = new Message(username, result, sentimentScore);
+    datastore.storeMessage(message);
+
+    response.sendRedirect("/users/" + username);
   }
 
   /**
