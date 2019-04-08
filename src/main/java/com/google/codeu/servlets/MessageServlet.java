@@ -24,6 +24,7 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
+import com.google.codeu.data.RegexExample;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -54,15 +55,15 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String user = request.getParameter("user");
+    String username = request.getParameter("username");
 
-    if (user == null || user.equals("")) {
+    if (username == null || username.equals("")) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
-    List<Message> messages = datastore.getMessages(user);
+    List<Message> messages = datastore.getMessages(username);
     Gson gson = new Gson();
     String json = gson.toJson(messages);
 
@@ -79,14 +80,28 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    String user = userService.getCurrentUser().getEmail();
-    String text = Jsoup.clean(request.getParameter("text"), Whitelist.none());
-    float sentimentScore = getSentimentScore(text);
+    String username = userService.getCurrentUser().getEmail();
 
-    Message message = new Message(user, text, sentimentScore);
+    String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
+
+    String regex = "(https?://\\S+\\.(png|jpg|gif))";
+
+    String replacement = "<img src=\"$1\" />";
+
+    String youtube_regex = "(https://www.youtube.com/watch\\?v=(\\S*))";
+    String youtube_replacement = "<iframe width=\"560\" height=\"315\" "+
+   "src=\"https://www.youtube.com/embed/$2\" frameborder=\"0\" "+
+   "allow=\"accelerometer; autoplay; encrypted-media; gyroscope; "+
+   "picture-in-picture\" allowfullscreen></iframe>";
+
+    String textWithImagesReplaced = userText.replaceAll(regex, replacement);
+    String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
+
+    float sentimentScore = getSentimentScore(result);
+    Message message = new Message(username, result, sentimentScore);
     datastore.storeMessage(message);
 
-    response.sendRedirect("/users/" + user);
+    response.sendRedirect("/users/" + username);
   }
 
   /**

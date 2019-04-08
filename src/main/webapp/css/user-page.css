@@ -72,6 +72,16 @@ nav li {
   margin-right: 10px
 }
 
+.message-body img {
+
+  display: block;
+
+  margin-top: 25px;
+
+  max-width: 500px;
+
+}
+
 /* The switch - the box around the slider */
 .switch {
   position: relative;

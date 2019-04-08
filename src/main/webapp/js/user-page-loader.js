@@ -44,7 +44,7 @@ function showMessageFormIfViewingSelf() {
 
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
-  const url = '/messages?user=' + parameterUsername;
+  const url = '/messages?username=' + parameterUsername;
   fetch(url)
       .then((response) => {
         return response.json();
@@ -63,7 +63,7 @@ function fetchMessages() {
       });
 }
 function fetchAboutMe(){
-  const url = '/about?user=' + parameterUsername;
+  const url = '/about?username=' + parameterUsername;
   fetch(url).then((response) => {
     return response.text();
   }).then((aboutMe) => {
