@@ -12,7 +12,6 @@ import java.util.Optional;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.codeu.data.Datastore;
-import com.google.codeu.data.RegexExample;
 import com.google.codeu.data.User;
 
 

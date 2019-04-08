@@ -24,7 +24,6 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
-import com.google.codeu.data.RegexExample;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -83,11 +82,12 @@ public class MessageServlet extends HttpServlet {
     String username = userService.getCurrentUser().getEmail();
 
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
-
+    
+    //regex and replacement variables used for images and gifs
     String regex = "(https?://\\S+\\.(png|jpg|gif))";
-
     String replacement = "<img src=\"$1\" />";
 
+    //youtube_regex/replacement variables used to parse through URL and output Youtube vids
     String youtube_regex = "(https://www.youtube.com/watch\\?v=(\\S*))";
     String youtube_replacement = "<iframe width=\"560\" height=\"315\" "+
    "src=\"https://www.youtube.com/embed/$2\" frameborder=\"0\" "+
