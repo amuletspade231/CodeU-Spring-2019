@@ -55,15 +55,15 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String user = request.getParameter("user");
+    String username = request.getParameter("username");
 
-    if (user == null || user.equals("")) {
+    if (username == null || username.equals("")) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
-    List<Message> messages = datastore.getMessages(user);
+    List<Message> messages = datastore.getMessages(username);
     Gson gson = new Gson();
     String json = gson.toJson(messages);
 
