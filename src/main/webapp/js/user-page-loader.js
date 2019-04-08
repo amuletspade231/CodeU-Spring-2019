@@ -15,7 +15,7 @@
  */
 
 // Get ?user=XYZ parameter value
-const full_url = new String(window.location.href);
+const full_url = new String(window.location.href); 
 var prefix = "/users/";
 var parameterUsername = full_url.substring(full_url.indexOf(prefix) + prefix.length);
 
@@ -49,7 +49,7 @@ function showMessageFormIfLoggedIn() {
 
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
-  const url = '/messages?user=' + parameterUsername;
+  const url = '/messages?username=' + parameterUsername;
   fetch(url)
       .then((response) => {
         return response.json();
@@ -68,7 +68,7 @@ function fetchMessages() {
       });
 }
 function fetchAboutMe(){
-  const url = '/about?user=' + parameterUsername;
+  const url = '/about?username=' + parameterUsername;
   fetch(url).then((response) => {
     return response.text();
   }).then((aboutMe) => {
