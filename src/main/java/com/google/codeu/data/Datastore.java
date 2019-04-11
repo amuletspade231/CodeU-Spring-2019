@@ -41,6 +41,8 @@ public class Datastore {
   /** Stores the Message in Datastore. */
   public void storeMessage(Message message) {
     Entity messageEntity = new Entity("Message", message.getId().toString());
+    messageEntity.setProperty("parent", message.getParent().toString());
+    messageEntity.setProperty("isReply", message.isReply());
     messageEntity.setProperty("user", message.getUser());
     messageEntity.setProperty("text", message.getText());
     messageEntity.setProperty("recipient", message.getRecipient());
@@ -62,6 +64,7 @@ public class Datastore {
       try {
         String idString = entity.getKey().getName();
         UUID id = UUID.fromString(idString);
+        UUID parent = UUID.fromString(idString);
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
         String recipient = (String) entity.getProperty("recipient");
@@ -111,7 +114,7 @@ public class Datastore {
    }
 
   /**
-   * Gets messages posted by a user, or all messages if user is null.
+   * Gets messages posted to/by a user, or all messages if user is null.
    *
    * @return a list of any messages posted by the user, sorted by time descending. If user is null, returns all messages in the Datastore.
    */

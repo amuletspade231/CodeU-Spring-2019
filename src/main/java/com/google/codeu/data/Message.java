@@ -36,10 +36,16 @@ public class Message {
    */
   public Message(String user, String text, String recipient, float sentimentScore) {
     this(UUID.randomUUID(), user, text, recipient, sentimentScore, System.currentTimeMillis());
+    this.parent = this.id;
   }
+ //Constructor for a reply
+ public Message(UUID parent, String user, String text, String recipient, float sentimentScore) {
+   this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis());
+ }
 
-  public Message(UUID id, String user, String text, String recipient, float sentimentScore, long timestamp) {
+  public Message(UUID id, UUID parent, String user, String text, String recipient, float sentimentScore, long timestamp) {
     this.id = id;
+    this.parent = parent;
     this.user = user;
     this.text = text;
     this.recipient = recipient;
@@ -49,6 +55,10 @@ public class Message {
 
   public UUID getId() {
     return id;
+  }
+
+  public UUID getParent() {
+    return parent;
   }
 
   public String getUser() {
