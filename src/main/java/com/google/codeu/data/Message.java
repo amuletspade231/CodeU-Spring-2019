@@ -22,6 +22,7 @@ import java.util.UUID;
 public class Message {
 
   private UUID id;
+  private UUID parent;
   private String user;
   private String text;
   private String recipient;
@@ -35,13 +36,12 @@ public class Message {
    * Generates a random ID and uses the current system time for the creation time.
    */
   public Message(String user, String text, String recipient, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, recipient, sentimentScore, System.currentTimeMillis());
-    this.parent = this.id;
+    this(UUID.randomUUID(), new UUID( 0L , 0L ), user, text, recipient, sentimentScore, System.currentTimeMillis());
   }
- //Constructor for a reply
- public Message(UUID parent, String user, String text, String recipient, float sentimentScore) {
-   this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis());
- }
+  //Constructor for a reply
+  public Message(UUID parent, String user, String text, String recipient, float sentimentScore) {
+    this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis());
+  }
 
   public Message(UUID id, UUID parent, String user, String text, String recipient, float sentimentScore, long timestamp) {
     this.id = id;
