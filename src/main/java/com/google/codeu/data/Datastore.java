@@ -49,8 +49,9 @@ public class Datastore {
     for (Entity entity : results.asIterable()) {
       try {
         String idString = entity.getKey().getName();
+        String parentString = entity.getProperty("parent");
         UUID id = UUID.fromString(idString);
-        UUID parent = UUID.fromString(idString);
+        UUID parent = UUID.fromString(parentString);
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
         String recipient = (String) entity.getProperty("recipient");
@@ -133,7 +134,7 @@ public class Datastore {
   /**
    * Gets messages posted to/by a user, or all messages if user is null.
    *
-   * @return a list of any messages posted by the user, sorted by time descending. If user is null, returns all messages in the Datastore.
+   * @return a list of any messages posted to/by the user, sorted by time descending. If user is null, returns all messages in the Datastore.
    */
   public List<Message> getMessages(String recipient) {
     List<Message> messages = new ArrayList<>();
