@@ -22,6 +22,7 @@ import java.util.UUID;
 public class Message {
 
   private UUID id;
+  private UUID parent;
   private String user;
   private String text;
   private String recipient;
@@ -40,7 +41,16 @@ public class Message {
   }
 
   public Message(UUID id, String user, String text, String recipient, float sentimentScore, long timestamp, String imageURL) {
+    this(UUID.randomUUID(), new UUID( 0L , 0L ), user, text, recipient, sentimentScore, System.currentTimeMillis());
+  }
+  //Constructor for a reply
+  public Message(UUID parent, String user, String text, String recipient, float sentimentScore) {
+    this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis());
+  }
+
+  public Message(UUID id, UUID parent, String user, String text, String recipient, float sentimentScore, long timestamp) {
     this.id = id;
+    this.parent = parent;
     this.user = user;
     this.text = text;
     this.recipient = recipient;
@@ -51,6 +61,10 @@ public class Message {
 
   public UUID getId() {
     return id;
+  }
+
+  public UUID getParent() {
+    return parent;
   }
 
   public String getUser() {

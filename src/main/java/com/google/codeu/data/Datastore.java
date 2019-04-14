@@ -53,6 +53,7 @@ public class Datastore {
     datastore.put(messageEntity);
   }
 
+
   /**
    * Loads in messages from the query into a list
    *
@@ -64,15 +65,24 @@ public class Datastore {
     for (Entity entity : results.asIterable()) {
       try {
         String idString = entity.getKey().getName();
+        String parentString = entity.getProperty("parent");
         UUID id = UUID.fromString(idString);
+        UUID parent = UUID.fromString(parentString);
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
         String recipient = (String) entity.getProperty("recipient");
         float sentimentScore = ((Double) entity.getProperty("sentimentScore")).floatValue();
         long timestamp = (long) entity.getProperty("timestamp");
         String imageURL = (String) entity.getProperty("imageURL");
+        
         Message message = new Message(id, user, text, recipient, sentimentScore, timestamp, imageURL);
+
         messages.add(message);
+
+        List<Message> replies = new ArrayList<>();
+        replies = getReplies((String)entity.getProperty("parent"));
+        messages.addAll(replies);
+
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
@@ -81,6 +91,32 @@ public class Datastore {
     }
 
     return messages;
+  }
+
+  /** Stores the Message in Datastore. */
+  public void storeMessage(Message message) {
+    Entity messageEntity = new Entity("Message", message.getId().toString());
+    messageEntity.setProperty("parent", message.getParent().toString());
+    messageEntity.setProperty("user", message.getUser());
+    messageEntity.setProperty("text", message.getText());
+    messageEntity.setProperty("recipient", message.getRecipient());
+    messageEntity.setProperty("sentimentScore", message.getSentimentScore());
+    messageEntity.setProperty("timestamp", message.getTimestamp());
+
+    datastore.put(messageEntity);
+  }
+
+  /** Stores the Reply in Datastore. */
+  public void storeReply(Message reply) {
+    Entity replyEntity = new Entity("Reply", reply.getId().toString());
+    replyEntity.setProperty("parent", reply.getParent().toString());
+    replyEntity.setProperty("user", reply.getUser());
+    replyEntity.setProperty("text", reply.getText());
+    replyEntity.setProperty("recipient", reply.getRecipient());
+    replyEntity.setProperty("sentimentScore", reply.getSentimentScore());
+    replyEntity.setProperty("timestamp", reply.getTimestamp());
+
+    datastore.put(replyEntity);
   }
 
     /** Stores the User in Datastore. */
@@ -114,9 +150,9 @@ public class Datastore {
    }
 
   /**
-   * Gets messages posted by a user, or all messages if user is null.
+   * Gets messages posted to/by a user, or all messages if user is null.
    *
-   * @return a list of any messages posted by the user, sorted by time descending. If user is null, returns all messages in the Datastore.
+   * @return a list of any messages posted to/by the user, sorted by time descending. If user is null, returns all messages in the Datastore.
    */
   public List<Message> getMessages(String recipient) {
     List<Message> messages = new ArrayList<>();
@@ -130,6 +166,25 @@ public class Datastore {
     messages = loadMessages(results);
 
     return messages;
+  }
+
+ /**
+  * Gets replies of a message, or all messages if parent is null.
+  *
+  * @return a list of any replies to a certain parent message, sorted by time descending. If user is null, returns all replies in the Datastore.
+  */
+  public List<Message> getReplies(String parent) {
+    List<Message> replies = new ArrayList<>();
+    Query query = new Query("Reply");
+
+    if (parent != null) {
+      query.setFilter(new Query.FilterPredicate("parent", FilterOperator.EQUAL, parent));
+    }
+    query.addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+    replies = loadMessages(results);
+
+    return replies;
   }
 
   /**
