@@ -23,7 +23,7 @@ public class MessageFeedServlet extends HttpServlet{
 
   @Override
   public void init() {
-    datastore = new Datastore();
+    datastore = new Datastore(); 
   }
 
  /**

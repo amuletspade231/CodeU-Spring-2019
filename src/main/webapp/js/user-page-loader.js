@@ -43,18 +43,23 @@ function setCommissions() {
 }
 
 /**
- * Shows the message form if the user is logged in and viewing their own page.
+ * Shows the message form if the user is logged in.
+ * Shows the about me form and commissions toggle if the user is viewing their own page.
  */
-function showMessageFormIfViewingSelf() {
+function showMessageFormIfLoggedIn() {
   fetch('/login-status')
       .then((response) => {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn && loginStatus.username == parameterUsername) {
-          document.getElementById('message-form').classList.remove('hidden');
-          document.getElementById('about-me-form').classList.remove('hidden');
-          document.getElementById('commissions-toggle').classList.remove('hidden');
+        if (loginStatus.isLoggedIn) {
+          const messageForm = document.getElementById('message-form');
+          messageForm.classList.remove('hidden');
+          messageForm.action = '/messages?recipient=' + parameterUsername;
+          if (loginStatus.username == parameterUsername) {
+            document.getElementById('about-me-form').classList.remove('hidden');
+            document.getElementById('commissions-toggle').classList.remove('hidden');
+          }
         }
       });
 }
@@ -139,7 +144,7 @@ function buildMessageDiv(message) {
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  showMessageFormIfViewingSelf();
+  showMessageFormIfLoggedIn();
   fetchMessages();
   fetchAboutMe();
   fetchIsTakingCommissions();
