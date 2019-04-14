@@ -15,7 +15,7 @@
  */
 
 // Get ?user=XYZ parameter value
-const full_url = new String(window.location.href); 
+const full_url = new String(window.location.href);
 var prefix = "/users/";
 var parameterUsername = full_url.substring(full_url.indexOf(prefix) + prefix.length);
 
@@ -38,7 +38,7 @@ function showMessageFormIfLoggedIn() {
         if (loginStatus.isLoggedIn) {
           const messageForm = document.getElementById('message-form');
           messageForm.classList.remove('hidden');
-          messageForm.action = '/messages?recipient=' + parameterUsername;
+          messageForm.action = '/messages?username=' + parameterUsername;
           if (loginStatus.username == parameterUsername) {
             document.getElementById('about-me-form').classList.remove('hidden');
             document.getElementById('commissions-toggle').classList.remove('hidden');
@@ -49,7 +49,7 @@ function showMessageFormIfLoggedIn() {
 
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
-  const url = '/messages?username=' + parameterUsername;
+  const url = '/messages?recipient=' + parameterUsername;
   fetch(url)
       .then((response) => {
         return response.json();
@@ -105,7 +105,44 @@ function buildMessageDiv(message) {
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
 
+  fetch('/login-status')
+      .then((response) => {
+        return response.json();
+      })
+      .then((loginStatus) => {
+        if (loginStatus.isLoggedIn) {
+          //const replyForm = buildReplyForm(message);
+          messageDiv.appendChild(replyForm);
+        }
+      });
+
   return messageDiv;
+}
+
+/**
+ * Builds a reply form for the message.
+ * @param {Message} message
+ * @return {Element}
+ */
+function buildReplyForm(message) {
+  const textArea = document.createElement('textarea');
+  textArea.name = 'text';
+
+  const break = document.createElement('br');
+
+  const input = document.createElement('input');
+  textArea.type = 'submit';
+  textArea.value = 'Submit';
+
+  const replyForm = document.createElement('form');
+  replyForm.action = '/messages?recipient=' + parameterUsername
+                                + 'parent=' + message.parent.toString();
+  replyForm.method = 'POST';
+  replyForm.appendChild(textArea);
+  replyForm.appendChild(break);
+  replyForm.appendChild(input);
+
+  return replyForm;
 }
 
 /** Fetches data and populates the UI of the page. */

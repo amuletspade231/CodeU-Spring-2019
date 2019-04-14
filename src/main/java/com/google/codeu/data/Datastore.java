@@ -49,7 +49,7 @@ public class Datastore {
     for (Entity entity : results.asIterable()) {
       try {
         String idString = entity.getKey().getName();
-        String parentString = entity.getProperty("parent");
+        String parentString = (String) entity.getProperty("parent");
         UUID id = UUID.fromString(idString);
         UUID parent = UUID.fromString(parentString);
         String user = (String) entity.getProperty("user");
@@ -153,7 +153,7 @@ public class Datastore {
  /**
   * Gets replies of a message, or all messages if parent is null.
   *
-  * @return a list of any replies to a certain parent message, sorted by time descending. If user is null, returns all replies in the Datastore.
+  * @return a list of any replies to a certain parent message, sorted by time descending. If parent is null, returns all replies in the Datastore.
   */
   public List<Message> getReplies(String parent) {
     List<Message> replies = new ArrayList<>();

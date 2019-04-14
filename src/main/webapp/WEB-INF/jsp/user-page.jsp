@@ -22,9 +22,9 @@
             <input type="checkbox">
             <span class="slider"></span>
           </label>
-        </div> 
+        </div>
         <img id= "profilepic" src = "http://nationalinsightnews.com/wp-content/uploads/2018/06/cat.jpg"/>
-        <div id="name"> 
+        <div id="name">
           <h3>CAT GIRLLL</h3>
           <a href="user-page.jsp" id="page-title">User Page</a>
           <p>Official Dabble account of the World's Favorite Cat.</p>
@@ -40,7 +40,7 @@
         </div>
         <br/>
         Compose a Post:
-        <form id="message-form" action="/messages" method="POST" class="hidden">
+        <form id="message-form" action="/messages" method="POST">
           <textarea name="text" id="message-input"></textarea>
           <br/>
           <input type="submit" value="Submit">

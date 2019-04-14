@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.codeu.servlets; 
+package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -104,8 +104,16 @@ public class MessageServlet extends HttpServlet {
     String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
 
     float sentimentScore = getSentimentScore(result);
-    Message message = new Message(username, result, recipient, sentimentScore);
-    datastore.storeMessage(message);
+
+    String parent = request.getParameter("parent");
+
+    //if (parent != "" || parent != null) {
+      //Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore);
+      //datastore.storeReply(reply);
+    //} else {
+      Message message = new Message(username, result, recipient, sentimentScore);
+      datastore.storeMessage(message);
+    //}
 
     response.sendRedirect("/users/" + recipient);
   }
