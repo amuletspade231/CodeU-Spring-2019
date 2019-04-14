@@ -58,7 +58,7 @@ public class AboutMeServlet extends HttpServlet{
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-     	response.sendRedirect("/home");
+     	response.sendRedirect("/");
      	return;
     }
 

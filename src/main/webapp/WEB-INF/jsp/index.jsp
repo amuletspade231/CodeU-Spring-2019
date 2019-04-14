@@ -11,7 +11,7 @@
     <%@include file="/WEB-INF/jspf/navigation.jspf" %>
     <%-- <nav>
       <ul id="navigation">
-        <li><a href="/home">Home</a></li>
+        <li><a href="/">Home</a></li>
 
     <%
       if (isUserLoggedIn) {
