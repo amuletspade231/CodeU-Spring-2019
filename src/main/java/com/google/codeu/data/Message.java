@@ -24,24 +24,29 @@ public class Message {
   private UUID id;
   private String user;
   private String text;
+  private String recipient;
   private long timestamp;
   private float sentimentScore;
+  private static String imageURL;
 
   /**
-   * Constructs a new {@link Message} posted by {@code user} with {@code text} content
-   * and {@code sentimentScore} sentiment scoring of the content. 
+   * Constructs a new {@link Message} posted by {@code user} for {@code recipient}
+   * with {@code text} content and {@code sentimentScore} sentiment scoring of the content.
+   * The recipient may be that same as the user if the user is posting on their own page.
    * Generates a random ID and uses the current system time for the creation time.
    */
-  public Message(String user, String text, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, sentimentScore, System.currentTimeMillis());
+  public Message(String user, String text, String recipient, float sentimentScore) {
+    this(UUID.randomUUID(), user, text, recipient, sentimentScore, System.currentTimeMillis(), null);
   }
 
-  public Message(UUID id, String user, String text, float sentimentScore, long timestamp) {
+  public Message(UUID id, String user, String text, String recipient, float sentimentScore, long timestamp, String imageURL) {
     this.id = id;
     this.user = user;
     this.text = text;
+    this.recipient = recipient;
     this.sentimentScore = sentimentScore;
     this.timestamp = timestamp;
+    this.imageURL = imageURL;
   }
 
   public UUID getId() {
@@ -62,5 +67,15 @@ public class Message {
 
   public long getTimestamp() {
     return timestamp;
+  }
+
+  public String getRecipient() {
+    return recipient;
+  }
+  public String getImageUrl() { 
+    return imageURL; 
+  }
+  public void setImageUrl(String newImage) { 
+    imageURL = newImage; 
   }
 }

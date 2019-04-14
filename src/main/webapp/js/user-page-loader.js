@@ -25,26 +25,38 @@ function setPageTitle() {
   document.title = parameterUsername + ' - User Page';
 }
 
+function fetchImageUploadUrlAndShowForm() {
+  fetch('/image-upload-url?recipient=' + parameterUsername)
+      .then((response) => {
+        return response.text();
+      })
+      .then((imageUploadUrl) => {
+        const messageForm = document.getElementById('message-form');
+        messageForm.classList.remove('hidden');
+        messageForm.action = imageUploadUrl;
+        document.getElementById('about-me-form').classList.remove('hidden');
+        document.getElementById('commissions-toggle').classList.remove('hidden');
+      });
+}
 /**
- * Shows the message form if the user is logged in and viewing their own page.
+ * Shows the message form if the user is logged in.
+ * Shows the about me form and commissions toggle if the user is viewing their own page.
  */
-function showMessageFormIfViewingSelf() {
+function showMessageFormIfLoggedIn() {
   fetch('/login-status')
       .then((response) => {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn && loginStatus.username == parameterUsername) {
-          document.getElementById('message-form').classList.remove('hidden');
-          document.getElementById('about-me-form').classList.remove('hidden');
-          document.getElementById('commissions-toggle').classList.remove('hidden');
+        if (loginStatus.isLoggedIn &&
+            loginStatus.username == parameterUsername) {
+          fetchImageUploadUrlAndShowForm();
         }
       });
 }
-
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
-  const url = '/messages?user=' + parameterUsername;
+  const url = '/messages?username=' + parameterUsername;
   fetch(url)
       .then((response) => {
         return response.json();
@@ -63,7 +75,7 @@ function fetchMessages() {
       });
 }
 function fetchAboutMe(){
-  const url = '/about?user=' + parameterUsername;
+  const url = '/about?username=' + parameterUsername;
   fetch(url).then((response) => {
     return response.text();
   }).then((aboutMe) => {
@@ -92,6 +104,10 @@ function buildMessageDiv(message) {
       ' [' + message.sentimentScore + ']'));
 
   const bodyDiv = document.createElement('div');
+  if(message.imageURL){
+    bodyDiv.innerHTML += '<br/>';
+    bodyDiv.innerHTML += '<img src="' + message.imageURL + '" />';
+  }
   bodyDiv.classList.add('message-body');
   bodyDiv.innerHTML = message.text;
 
@@ -106,8 +122,7 @@ function buildMessageDiv(message) {
 /** Fetches data and populates the UI of the page. */
 function buildUI() {
   setPageTitle();
-  showMessageFormIfViewingSelf();
+  showMessageFormIfLoggedIn();
   fetchMessages();
   fetchAboutMe();
-
 }

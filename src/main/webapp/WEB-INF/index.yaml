@@ -16,5 +16,7 @@ indexes:
 - kind: Message
   properties:
   - name: user
+  - name: recipient
+  - name: sentimentScore
   - name: timestamp
     direction: desc

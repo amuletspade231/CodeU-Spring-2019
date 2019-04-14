@@ -16,6 +16,12 @@
 
 package com.google.codeu.servlets; 
 
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.cloud.language.v1.Document;
@@ -24,7 +30,6 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
-import com.google.codeu.data.RegexExample;
 import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.List;
@@ -34,6 +39,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import java.util.Map;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -55,15 +61,15 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String user = request.getParameter("user");
+    String username = request.getParameter("username");
 
-    if (user == null || user.equals("")) {
+    if (username == null || username.equals("")) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
-    List<Message> messages = datastore.getMessages(user);
+    List<Message> messages = datastore.getMessages(username);
     Gson gson = new Gson();
     String json = gson.toJson(messages);
 
@@ -80,14 +86,20 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    String user = userService.getCurrentUser().getEmail();
+    String username = userService.getCurrentUser().getEmail();
+    
+    String recipient = request.getParameter("recipient");
 
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+
+    List<BlobKey> blobKeys = blobs.get("image");
+
     String regex = "(https?://\\S+\\.(png|jpg|gif))";
-
     String replacement = "<img src=\"$1\" />";
-
 
     String youtube_regex = "(https://www.youtube.com/watch\\?v=(\\S*))";
     String youtube_replacement = "<iframe width=\"560\" height=\"315\" "+
@@ -95,21 +107,24 @@ public class MessageServlet extends HttpServlet {
    "allow=\"accelerometer; autoplay; encrypted-media; gyroscope; "+
    "picture-in-picture\" allowfullscreen></iframe>";
 
-    String result = userText.replaceAll(youtube_regex, youtube_replacement);
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
-    float sentimentScore;
+    String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
 
-    if(userText.equals(result)){
-      sentimentScore = getSentimentScore(textWithImagesReplaced);
-      Message message = new Message(user, textWithImagesReplaced, sentimentScore);
-      datastore.storeMessage(message);
+    float sentimentScore = getSentimentScore(result);
+    Message message = new Message(username, result, recipient, sentimentScore);
+
+    if(blobKeys != null && !blobKeys.isEmpty()) {
+      BlobKey blobKey = blobKeys.get(0);
+      ImagesService imagesService = ImagesServiceFactory.getImagesService();
+      ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+      String imageURL = imagesService.getServingUrl(options);
+      message.setImageUrl(imageURL);
     }
-    if(userText.equals(textWithImagesReplaced)){
-      sentimentScore= getSentimentScore(result);
-      Message message = new Message(user, result, sentimentScore);
-      datastore.storeMessage(message);
-    }
-    response.sendRedirect("/users/" + user);
+
+    datastore.storeMessage(message);
+
+    response.sendRedirect("/users/" + recipient);
+
   }
 
   /**
