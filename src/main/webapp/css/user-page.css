@@ -103,6 +103,7 @@ nav li {
   border-radius: 34px;
 }
 
+/* Pseudo-element containing the white circle of the toggle. */
 .slider:before {
   position: absolute;
   content: "";

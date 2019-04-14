@@ -13,7 +13,7 @@
     <div id="commissions-toggle" class="hidden">
       <label class="switch">
         <input type="checkbox" id="commissions-checkbox" onclick="setCommissions()">
-        <span class="slider"></span>
+        <span class="slider" id="commissions-slider"></span>
       </label>
     </div>
     <div id="about-me-container">Loading...</div>
