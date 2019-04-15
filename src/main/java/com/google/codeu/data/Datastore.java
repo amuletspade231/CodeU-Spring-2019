@@ -48,10 +48,10 @@ public class Datastore {
 
     for (Entity entity : results.asIterable()) {
       try {
-        String idString = entity.getKey().getName();
-        String parentString = entity.getProperty("parent");
-        UUID id = UUID.fromString(idString);
-        UUID parent = UUID.fromString(parentString);
+        String idString = (String) entity.getKey().getName();
+        String parentString = (String) entity.getProperty("parent");
+        UUID id = (UUID) UUID.fromString(idString);
+        UUID parent = (UUID) UUID.fromString(parentString);
         String user = (String) entity.getProperty("user");
         String text = (String) entity.getProperty("text");
         String recipient = (String) entity.getProperty("recipient");
