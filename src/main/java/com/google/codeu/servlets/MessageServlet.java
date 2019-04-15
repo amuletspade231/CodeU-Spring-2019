@@ -59,15 +59,23 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String username = request.getParameter("username");
+    String recipient = request.getParameter("recipient");
 
-    if (username == null || username.equals("")) {
+    if (recipient == null || recipient.equals("")) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
-    List<Message> messages = datastore.getMessages(username);
+    String parent = request.getParameter("parent");
+
+    List<Message> messages;
+    if (parent == null || parent.equals("")) {
+      messages = datastore.getMessages(recipient);
+    } else {
+      messages = datastore.getReplies(parent);
+    }
+
     Gson gson = new Gson();
     String json = gson.toJson(messages);
 
@@ -107,13 +115,13 @@ public class MessageServlet extends HttpServlet {
 
     String parent = request.getParameter("parent");
 
-    //if (parent != "" || parent != null) {
-      //Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore);
-      //datastore.storeReply(reply);
-    //} else {
+    if (parent == null || parent.equals("")) {
       Message message = new Message(username, result, recipient, sentimentScore);
       datastore.storeMessage(message);
-    //}
+    } else {
+      Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore);
+      datastore.storeReply(reply);
+    }
 
     response.sendRedirect("/users/" + recipient);
   }

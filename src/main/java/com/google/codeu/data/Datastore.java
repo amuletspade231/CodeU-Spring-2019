@@ -61,10 +61,10 @@ public class Datastore {
         Message message = new Message(id, parent, user, text, recipient, sentimentScore, timestamp);
         messages.add(message);
 
-        List<Message> replies = new ArrayList<>();
-        replies = getReplies((String)entity.getProperty("parent"));
-        messages.addAll(replies);
-
+        // List<Message> replies = new ArrayList<>();
+        // replies = getReplies(idString);
+        // messages.addAll(replies);
+        //System.out.println(text);
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
@@ -145,6 +145,7 @@ public class Datastore {
     }
     query.addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
+    //System.out.println("get messages");
     messages = loadMessages(results);
 
     return messages;
@@ -164,6 +165,7 @@ public class Datastore {
     }
     query.addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
+    //System.out.println("get replies");
     replies = loadMessages(results);
 
     return replies;

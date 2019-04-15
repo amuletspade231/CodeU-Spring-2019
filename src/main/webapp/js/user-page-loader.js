@@ -38,7 +38,7 @@ function showMessageFormIfLoggedIn() {
         if (loginStatus.isLoggedIn) {
           const messageForm = document.getElementById('message-form');
           messageForm.classList.remove('hidden');
-          messageForm.action = '/messages?username=' + parameterUsername;
+          messageForm.action = '/messages?recipient=' + parameterUsername;
           if (loginStatus.username == parameterUsername) {
             document.getElementById('about-me-form').classList.remove('hidden');
             document.getElementById('commissions-toggle').classList.remove('hidden');
@@ -63,10 +63,36 @@ function fetchMessages() {
         }
         messages.forEach((message) => {
           const messageDiv = buildMessageDiv(message);
+
+          const replyThread = fetchReplies(message);
+          console.log("add reply to " + message.text + "\n");
+          messageDiv.appendChild(replyThread);
+
           messagesContainer.appendChild(messageDiv);
         });
       });
 }
+
+/** Fetches messages and add them to the page. */
+function fetchReplies(message) {
+  const replyThread = document.createElement('div');
+  replyThread.classList.add('reply-thread');
+
+  const url = '/messages?recipient=' + parameterUsername
+                                + '&parent=' + message.id.toString();
+  fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then((messages) => {
+        messages.forEach((reply) => {
+          const replyDiv = buildMessageDiv(reply);
+          replyThread.appendChild(replyDiv);
+        });
+      });
+  return replyThread;
+}
+
 function fetchAboutMe(){
   const url = '/about?username=' + parameterUsername;
   fetch(url).then((response) => {
@@ -111,7 +137,8 @@ function buildMessageDiv(message) {
       })
       .then((loginStatus) => {
         if (loginStatus.isLoggedIn) {
-          //const replyForm = buildReplyForm(message);
+          const replyForm = buildReplyForm(message);
+          console.log("add reply form for " + message.text + "\n");
           messageDiv.appendChild(replyForm);
         }
       });
@@ -128,18 +155,18 @@ function buildReplyForm(message) {
   const textArea = document.createElement('textarea');
   textArea.name = 'text';
 
-  const break = document.createElement('br');
+  const linebreak = document.createElement('br');
 
   const input = document.createElement('input');
-  textArea.type = 'submit';
-  textArea.value = 'Submit';
+  input.type = 'submit';
+  input.value = 'Submit';
 
   const replyForm = document.createElement('form');
   replyForm.action = '/messages?recipient=' + parameterUsername
-                                + 'parent=' + message.parent.toString();
+                                + '&parent=' + message.id.toString();
   replyForm.method = 'POST';
   replyForm.appendChild(textArea);
-  replyForm.appendChild(break);
+  replyForm.appendChild(linebreak);
   replyForm.appendChild(input);
 
   return replyForm;
