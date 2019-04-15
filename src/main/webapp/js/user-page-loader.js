@@ -43,6 +43,30 @@ function setCommissions() {
 }
 
 /**
+ * Fetches all of the image posts made by the viewed user.
+ */
+function fetchGallery() {
+  const url = "/messages?username=" + parameterUsername + "&gallery=true";
+  fetch(url)
+    .then((response) => {
+      return response.json();
+    })
+    .then((messages) => {
+      const messagesContainer = document.getElementById('message-container');
+      if (messages.length == 0) {
+        messagesContainer.innerHTML = '<p>This user has no gallery posts yet.</p>';
+      } else {
+        messagesContainer.innerHTML = '';
+        messages.forEach((message) => {
+          const messageDiv = buildMessageDiv(message);
+          messagesContainer.appendChild(messageDiv);
+        });
+      }
+    });
+}
+
+
+/**
  * Shows the message form if the user is logged in.
  * Shows the about me form and commissions toggle if the user is viewing their own page.
  */

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.codeu.servlets; 
+package com.google.codeu.servlets;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -67,10 +67,19 @@ public class MessageServlet extends HttpServlet {
       return;
     }
 
-    List<Message> messages = datastore.getMessages(username);
+    List<Message> messages;
+    String gallery = request.getParameter("gallery");
+
+    boolean isGalleryRequest = (gallery != null && gallery.equals("true"));
+    if (isGalleryRequest) {
+      messages = datastore.getGallery(username);
+    } else {
+      messages = datastore.getMessages(username);
+    }
+
     Gson gson = new Gson();
     String json = gson.toJson(messages);
-
+    System.out.println("\n\n" + json + "\n");
     response.getWriter().println(json);
   }
 
@@ -102,9 +111,10 @@ public class MessageServlet extends HttpServlet {
 
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
     String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
-
     float sentimentScore = getSentimentScore(result);
-    Message message = new Message(username, result, recipient, sentimentScore);
+    boolean containsImage = !userText.equals(textWithImagesReplaced);
+
+    Message message = new Message(username, result, recipient, sentimentScore, containsImage);
     datastore.storeMessage(message);
 
     response.sendRedirect("/users/" + recipient);
