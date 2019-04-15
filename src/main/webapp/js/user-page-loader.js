@@ -68,13 +68,12 @@ function fetchMessages() {
       });
 }
 
-/** Fetches messages and add them to the page. */
+/** Fetches replies and adds them to their parent message. */
 function fetchReplies(message) {
   const replyThread = document.createElement('div');
   replyThread.classList.add('reply-thread');
 
-  const url = '/messages?recipient=' + parameterUsername
-                                + '&parent=' + message.id.toString();
+  const url = '/messages?parent=' + message.id.toString();
   fetch(url)
       .then((response) => {
         return response.json();
@@ -133,12 +132,10 @@ function buildMessageDiv(message) {
       .then((loginStatus) => {
         if (loginStatus.isLoggedIn) {
           const replyForm = buildReplyForm(message);
-          console.log("add reply form for " + message.text + "\n");
           messageDiv.appendChild(replyForm);
         }
 
         const replyThread = fetchReplies(message);
-        console.log("add reply to " + message.text + "\n");
         messageDiv.appendChild(replyThread);
       });
 
@@ -161,8 +158,7 @@ function buildReplyForm(message) {
   input.value = 'Submit';
 
   const replyForm = document.createElement('form');
-  replyForm.action = '/messages?recipient=' + parameterUsername
-                                + '&parent=' + message.id.toString();
+  replyForm.action = '/messages?parent=' + message.id.toString();
   replyForm.method = 'POST';
   replyForm.appendChild(textArea);
   replyForm.appendChild(linebreak);

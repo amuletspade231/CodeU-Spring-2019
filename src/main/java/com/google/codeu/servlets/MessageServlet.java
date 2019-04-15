@@ -61,13 +61,13 @@ public class MessageServlet extends HttpServlet {
 
     String recipient = request.getParameter("recipient");
 
-    if (recipient == null || recipient.equals("")) {
+    String parent = request.getParameter("parent");
+
+    if ((recipient == null || recipient.equals("")) && (parent == null || parent.equals(""))) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
-
-    String parent = request.getParameter("parent");
 
     List<Message> messages;
     if (parent == null || parent.equals("")) {
