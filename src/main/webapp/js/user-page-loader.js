@@ -63,11 +63,6 @@ function fetchMessages() {
         }
         messages.forEach((message) => {
           const messageDiv = buildMessageDiv(message);
-
-          const replyThread = fetchReplies(message);
-          console.log("add reply to " + message.text + "\n");
-          messageDiv.appendChild(replyThread);
-
           messagesContainer.appendChild(messageDiv);
         });
       });
@@ -141,6 +136,10 @@ function buildMessageDiv(message) {
           console.log("add reply form for " + message.text + "\n");
           messageDiv.appendChild(replyForm);
         }
+
+        const replyThread = fetchReplies(message);
+        console.log("add reply to " + message.text + "\n");
+        messageDiv.appendChild(replyThread);
       });
 
   return messageDiv;
