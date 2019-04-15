@@ -8,7 +8,6 @@
   </head>
   <body onload="buildUI();">
     <div id="header">
-
       <div id="navii"><%@include file="/WEB-INF/jspf/navigation.jspf" %></div>
       <div id="dabbletitle">
         <h1>DABBLE</h1>
@@ -19,8 +18,8 @@
       <div id="sidebar">
         <div id="commissions-toggle" class="hidden">
           <label class="switch">
-            <input type="checkbox">
-            <span class="slider"></span>
+            <input type="checkbox" id="commissions-checkbox" onclick="setCommissions()">
+            <span class="slider" id="commissions-slider"></span>
           </label>
         </div>
         <img id= "profilepic" src = "http://nationalinsightnews.com/wp-content/uploads/2018/06/cat.jpg"/>

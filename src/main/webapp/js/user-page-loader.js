@@ -26,6 +26,47 @@ function setPageTitle() {
 }
 
 /**
+ * When the commissions toggle is clicked, sets the user's
+ * isTakingCommissions attribute accordingly.
+ */
+function setCommissions() {
+  const checkbox = document.getElementById("commissions-checkbox");
+  const url = "/commissions";
+  console.log(checkbox.checked);
+  //send a POST request to CommissionsServlet.doPost
+  let bodyData = new URLSearchParams();
+  bodyData.append("commissionsToggle", checkbox.checked);
+  fetch(url, {
+    method: "POST",
+    body: bodyData,
+  });
+}
+
+/**
+ * Fetches all of the image posts made by the viewed user.
+ */
+function fetchGallery() {
+  const url = "/messages?username=" + parameterUsername + "&gallery=true";
+  fetch(url)
+    .then((response) => {
+      return response.json();
+    })
+    .then((messages) => {
+      const messagesContainer = document.getElementById('message-container');
+      if (messages.length == 0) {
+        messagesContainer.innerHTML = '<p>This user has no gallery posts yet.</p>';
+      } else {
+        messagesContainer.innerHTML = '';
+        messages.forEach((message) => {
+          const messageDiv = buildMessageDiv(message);
+          messagesContainer.appendChild(messageDiv);
+        });
+      }
+    });
+}
+
+
+/**
  * Shows the message form if the user is logged in.
  * Shows the about me form and commissions toggle if the user is viewing their own page.
  */
@@ -87,20 +128,35 @@ function fetchReplies(message) {
   return replyThread;
 }
 
-function fetchAboutMe(){
+/**
+ * Gets the text of the user's About Me and populates a div with it.
+ */
+function fetchAboutMe() {
   const url = '/about?username=' + parameterUsername;
   fetch(url).then((response) => {
     return response.text();
   }).then((aboutMe) => {
     const aboutMeContainer = document.getElementById('about-me-container');
-    if(aboutMe == ''){
+    if(aboutMe == '') {
       aboutMe = 'Enter information about yourself.';
     }
-
     aboutMeContainer.innerHTML = aboutMe;
-
   });
 }
+
+/**
+ * Gets the user's commission status and sets the slider's default value to it.
+ */
+ function fetchIsTakingCommissions() {
+   const url = "/commissions";
+   fetch(url).then((response) => {
+     return response.text();
+   }).then((isTakingCommissions) => {
+     let commissionsToggle = document.getElementById("commissions-checkbox");
+     let slider = document.getElementById("commissions-slider");
+     commissionsToggle.checked = (isTakingCommissions === "true");
+   });
+ }
 
 
 /**
@@ -173,5 +229,5 @@ function buildUI() {
   showMessageFormIfLoggedIn();
   fetchMessages();
   fetchAboutMe();
-
+  fetchIsTakingCommissions();
 }

@@ -70,15 +70,22 @@ public class MessageServlet extends HttpServlet {
     }
 
     List<Message> messages;
-    if (parent == null || parent.equals("")) {
-      messages = datastore.getMessages(recipient);
+    
+    String gallery = request.getParameter("gallery");
+
+    boolean isGalleryRequest = (gallery != null && gallery.equals("true"));
+    if (isGalleryRequest) {
+      messages = datastore.getGallery(recipient);
     } else {
-      messages = datastore.getReplies(parent);
+      if (parent == null || parent.equals("")) {
+        messages = datastore.getMessages(recipient);
+      } else {
+        messages = datastore.getReplies(parent);
     }
 
     Gson gson = new Gson();
     String json = gson.toJson(messages);
-
+    System.out.println("\n\n" + json + "\n");
     response.getWriter().println(json);
   }
 
@@ -110,16 +117,15 @@ public class MessageServlet extends HttpServlet {
 
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
     String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
-
     float sentimentScore = getSentimentScore(result);
-
+    boolean containsImage = !userText.equals(textWithImagesReplaced);
     String parent = request.getParameter("parent");
 
     if (parent == null || parent.equals("")) {
-      Message message = new Message(username, result, recipient, sentimentScore);
+      Message message = new Message(username, result, recipient, sentimentScore, containsImage);
       datastore.storeMessage(message);
     } else {
-      Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore);
+      Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore, containsImage);
       datastore.storeReply(reply);
     }
 
