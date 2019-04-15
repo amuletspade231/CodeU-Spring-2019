@@ -26,12 +26,16 @@ import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.codeu.data.RegexExample;
 import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 
@@ -85,7 +89,7 @@ public class MessageServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/home");
+      response.sendRedirect("/");
       return;
     }
 
