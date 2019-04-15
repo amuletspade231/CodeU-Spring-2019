@@ -64,8 +64,9 @@ public class MessageServlet extends HttpServlet {
     }
 
     List<Message> messages;
+    String gallery = request.getParameter("gallery");
 
-    boolean isGalleryRequest = request.getParameter("gallery").equals("true");
+    boolean isGalleryRequest = (gallery != null && gallery.equals("true"));
     if (isGalleryRequest) {
       messages = datastore.getGallery(username);
     } else {
@@ -74,7 +75,7 @@ public class MessageServlet extends HttpServlet {
 
     Gson gson = new Gson();
     String json = gson.toJson(messages);
-
+    System.out.println("\n\n" + json + "\n");
     response.getWriter().println(json);
   }
 

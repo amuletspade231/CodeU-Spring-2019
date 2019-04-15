@@ -47,7 +47,7 @@ public class CommissionsServlet extends HttpServlet{
     String userEmail = userService.getCurrentUser().getEmail();
     User user = datastore.getUser(userEmail);
 
-    response.getOutputStream().print(user.getIsTakingCommissions());
+    response.getOutputStream().print(user != null && user.getIsTakingCommissions());
   }
 
   @Override

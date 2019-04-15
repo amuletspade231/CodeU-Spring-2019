@@ -63,8 +63,8 @@ function fetchGallery() {
         });
       }
     });
-  }
 }
+
 
 /**
  * Shows the message form if the user is logged in.

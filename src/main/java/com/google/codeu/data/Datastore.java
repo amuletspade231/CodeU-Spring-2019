@@ -199,7 +199,7 @@ public class Datastore {
     query.addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);
-    gallery = datastore.loadMessages(query);
+    gallery = loadMessages(results);
     return gallery;
   }
 }
