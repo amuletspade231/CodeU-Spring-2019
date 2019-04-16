@@ -39,7 +39,7 @@
         </div>
         <br/>
         Compose a Post:
-        <form id="message-form" action="/messages" method="POST" class="hidden">
+        <form id="message-form" action="/messages" method="POST">
           <textarea name="text" id="message-input"></textarea>
           <br/>
           <input type="submit" value="Submit">
