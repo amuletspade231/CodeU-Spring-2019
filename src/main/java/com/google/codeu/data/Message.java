@@ -33,6 +33,7 @@ public class Message {
   /**
    * Constructs a new {@link Message} posted by {@code user} for {@code recipient}
    * with {@code text} content and {@code sentimentScore} sentiment scoring of the content.
+   * If the message is a reply, {@code parent} will match the ID of its parent, otherwise null.
    * The recipient may be that same as the user if the user is posting on their own page.
    * Generates a random ID and uses the current system time for the creation time.
    */

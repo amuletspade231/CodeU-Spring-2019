@@ -61,11 +61,6 @@ public class Datastore {
 
         Message message = new Message(id, parent, user, text, recipient, sentimentScore, timestamp, containsImage);
         messages.add(message);
-
-        List<Message> replies = new ArrayList<>();
-        replies = getReplies((String)entity.getProperty("parent"));
-        messages.addAll(replies);
-
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
@@ -154,7 +149,7 @@ public class Datastore {
  /**
   * Gets replies of a message, or all messages if parent is null.
   *
-  * @return a list of any replies to a certain parent message, sorted by time descending. If user is null, returns all replies in the Datastore.
+  * @return a list of any replies to a certain parent message, sorted by time descending. If parent is null, returns all replies in the Datastore.
   */
   public List<Message> getReplies(String parent) {
     List<Message> replies = new ArrayList<>();
