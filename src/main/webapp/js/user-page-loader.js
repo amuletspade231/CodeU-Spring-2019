@@ -60,7 +60,7 @@ function switchTab(tabName) {
  * Fetches all of the image posts made by the viewed user.
  */
 function fetchGallery() {
-  const url = "/messages?username=" + parameterUsername + "&gallery=true";
+  const url = "/messages?recipient=" + parameterUsername + "&gallery=true";
   fetch(url)
     .then((response) => {
       return response.json();
