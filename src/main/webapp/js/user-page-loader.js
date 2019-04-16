@@ -43,6 +43,20 @@ function setCommissions() {
 }
 
 /**
+ * Switches between displaying all posts and displaying the gallery.
+ * @param {String} tabName
+ */
+function switchTab(tabName) {
+  if (tabName == 'gallery') {
+    document.getElementById('maincontent').classList.add('hidden');
+    document.getElementById('gallery').classList.remove('hidden');
+  } else {
+    document.getElementById('gallery').classList.add('hidden');
+    document.getElementById('maincontent').classList.remove('hidden');
+  }
+}
+
+/**
  * Fetches all of the image posts made by the viewed user.
  */
 function fetchGallery() {
@@ -52,7 +66,7 @@ function fetchGallery() {
       return response.json();
     })
     .then((messages) => {
-      const messagesContainer = document.getElementById('message-container');
+      const messagesContainer = document.getElementById('gallery-message-container');
       if (messages.length == 0) {
         messagesContainer.innerHTML = '<p>This user has no gallery posts yet.</p>';
       } else {
@@ -170,6 +184,7 @@ function buildUI() {
   setPageTitle();
   showMessageFormIfLoggedIn();
   fetchMessages();
+  fetchGallery();
   fetchAboutMe();
   fetchIsTakingCommissions();
 }
