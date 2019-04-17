@@ -74,15 +74,9 @@ public class Datastore {
         float sentimentScore = ((Double) entity.getProperty("sentimentScore")).floatValue();
         long timestamp = (long) entity.getProperty("timestamp");
         String imageURL = (String) entity.getProperty("imageURL");
-        
-        Message message = new Message(id, user, text, recipient, sentimentScore, timestamp, imageURL);
 
+        Message message = new Message(id, parent, user, text, recipient, sentimentScore, timestamp, imageURL);
         messages.add(message);
-
-        List<Message> replies = new ArrayList<>();
-        replies = getReplies((String)entity.getProperty("parent"));
-        messages.addAll(replies);
-
       } catch (Exception e) {
         System.err.println("Error reading message.");
         System.err.println(entity.toString());
@@ -102,7 +96,7 @@ public class Datastore {
     messageEntity.setProperty("recipient", message.getRecipient());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
     messageEntity.setProperty("timestamp", message.getTimestamp());
-
+    messageEntity.setProperty("imageURL", message.getImageURL());
     datastore.put(messageEntity);
   }
 
@@ -171,7 +165,7 @@ public class Datastore {
  /**
   * Gets replies of a message, or all messages if parent is null.
   *
-  * @return a list of any replies to a certain parent message, sorted by time descending. If user is null, returns all replies in the Datastore.
+  * @return a list of any replies to a certain parent message, sorted by time descending. If parent is null, returns all replies in the Datastore.
   */
   public List<Message> getReplies(String parent) {
     List<Message> replies = new ArrayList<>();
@@ -206,5 +200,17 @@ public class Datastore {
     Query query = new Query("Message");
     PreparedQuery results = datastore.prepare(query);
     return results.countEntities(FetchOptions.Builder.withLimit(1000));
+  }
+
+  public List<Message> getGallery(String recipient) {
+    List<Message> gallery = new ArrayList<>();
+    Query query = new Query("Message");
+    query.setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient));
+    query.setFilter(new Query.FilterPredicate("imageURL", FilterOperator.NOT_EQUAL, null));
+    query.addSort("timestamp", SortDirection.DESCENDING);
+
+    PreparedQuery results = datastore.prepare(query);
+    gallery = loadMessages(results);
+    return gallery;
   }
 }

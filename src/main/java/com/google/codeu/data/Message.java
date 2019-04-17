@@ -29,26 +29,25 @@ public class Message {
   private long timestamp;
   private float sentimentScore;
   private static String imageURL;
-
+  
   /**
    * Constructs a new {@link Message} posted by {@code user} for {@code recipient}
    * with {@code text} content and {@code sentimentScore} sentiment scoring of the content.
+   * If the message is a reply, {@code parent} will match the ID of its parent, otherwise null.
    * The recipient may be that same as the user if the user is posting on their own page.
    * Generates a random ID and uses the current system time for the creation time.
    */
-  public Message(String user, String text, String recipient, float sentimentScore) {
-    this(UUID.randomUUID(), user, text, recipient, sentimentScore, System.currentTimeMillis(), null);
-  }
 
-  public Message(UUID id, String user, String text, String recipient, float sentimentScore, long timestamp, String imageURL) {
-    this(UUID.randomUUID(), new UUID( 0L , 0L ), user, text, recipient, sentimentScore, System.currentTimeMillis());
+  public Message(String user, String text, String recipient, float sentimentScore, String imageURL) {
+    this(UUID.randomUUID(), new UUID( 0L , 0L ), user, text, recipient, sentimentScore, System.currentTimeMillis(), imageURL);
   }
+    
   //Constructor for a reply
   public Message(UUID parent, String user, String text, String recipient, float sentimentScore) {
-    this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis());
+    this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis(), null);
   }
 
-  public Message(UUID id, UUID parent, String user, String text, String recipient, float sentimentScore, long timestamp) {
+  public Message(UUID id, UUID parent, String user, String text, String recipient, float sentimentScore, long timestamp, String imageURL) {
     this.id = id;
     this.parent = parent;
     this.user = user;
@@ -86,10 +85,13 @@ public class Message {
   public String getRecipient() {
     return recipient;
   }
+    
   public String getImageUrl() { 
     return imageURL; 
   }
+    
   public void setImageUrl(String newImage) { 
     imageURL = newImage; 
   }
+
 }

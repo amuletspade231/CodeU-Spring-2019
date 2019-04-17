@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.google.codeu.servlets; 
+package com.google.codeu.servlets;
 
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
@@ -31,12 +31,16 @@ import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
 import com.google.gson.Gson;
+
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
+
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
 import java.util.Map;
@@ -61,18 +65,34 @@ public class MessageServlet extends HttpServlet {
 
     response.setContentType("application/json");
 
-    String username = request.getParameter("username");
+    String recipient = request.getParameter("recipient");
 
-    if (username == null || username.equals("")) {
+    String parent = request.getParameter("parent");
+
+    if ((recipient == null || recipient.equals("")) && (parent == null || parent.equals(""))) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
-    List<Message> messages = datastore.getMessages(username);
+    List<Message> messages;
+
+    String gallery = request.getParameter("gallery");
+
+    boolean isGalleryRequest = (gallery != null && gallery.equals("true"));
+    if (isGalleryRequest) {
+      messages = datastore.getGallery(recipient);
+    } else {
+      // a parentless message is a top-level post, not a reply
+      if (parent == null || parent.equals("")) {
+        messages = datastore.getMessages(recipient);
+      } else {
+        messages = datastore.getReplies(parent);
+      }
+    }
+
     Gson gson = new Gson();
     String json = gson.toJson(messages);
-
     response.getWriter().println(json);
   }
 
@@ -82,12 +102,12 @@ public class MessageServlet extends HttpServlet {
 
     UserService userService = UserServiceFactory.getUserService();
     if (!userService.isUserLoggedIn()) {
-      response.sendRedirect("/home");
+      response.sendRedirect("/");
       return;
     }
 
     String username = userService.getCurrentUser().getEmail();
-    
+
     String recipient = request.getParameter("recipient");
 
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
@@ -109,19 +129,26 @@ public class MessageServlet extends HttpServlet {
 
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
     String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
-
     float sentimentScore = getSentimentScore(result);
-    Message message = new Message(username, result, recipient, sentimentScore);
-
+    String imageURL = null
+    
     if(blobKeys != null && !blobKeys.isEmpty()) {
       BlobKey blobKey = blobKeys.get(0);
       ImagesService imagesService = ImagesServiceFactory.getImagesService();
       ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-      String imageURL = imagesService.getServingUrl(options);
-      message.setImageUrl(imageURL);
+      
+      imageURL = imagesService.getServingUrl(options);
     }
 
-    datastore.storeMessage(message);
+    String parent = request.getParameter("parent");
+
+    if (parent == null || parent.equals("")) {
+      Message message = new Message(username, result, recipient, sentimentScore, imageURL);
+      datastore.storeMessage(message);
+    } else {
+      Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore);
+      datastore.storeReply(reply);
+    }
 
     response.sendRedirect("/users/" + recipient);
 
