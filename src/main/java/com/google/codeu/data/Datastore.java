@@ -191,6 +191,7 @@ public class Datastore {
     Query query = new Query("Message");
     query.setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient));
     query.setFilter(new Query.FilterPredicate("imageURL", FilterOperator.NOT_EQUAL, null));
+    query.addSort("imageURL");
     query.addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);

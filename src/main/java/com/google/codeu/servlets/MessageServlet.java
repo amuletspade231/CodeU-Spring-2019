@@ -112,12 +112,6 @@ public class MessageServlet extends HttpServlet {
 
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
-    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-
-    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-
-    List<BlobKey> blobKeys = blobs.get("image");
-
     String regex = "(https?://\\S+\\.(png|jpg|gif))";
     String replacement = "<img src=\"$1\" />";
 
@@ -132,16 +126,31 @@ public class MessageServlet extends HttpServlet {
     float sentimentScore = getSentimentScore(result);
     String imageURL = null;
 
-    if(blobKeys != null && !blobKeys.isEmpty()) {
-      BlobKey blobKey = blobKeys.get(0);
-      BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
-      if (blobInfo.getSize()!= 0) {
-        ImagesService imagesService = ImagesServiceFactory.getImagesService();
-        ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-        imageURL = imagesService.getServingUrl(options);
-      }else{
-        blobstoreService.delete(blobKey);
-      } 
+    try {
+      BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
+      Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+      List<BlobKey> blobKeys = blobs.get("image");
+      if (blobKeys != null && !blobKeys.isEmpty()) {
+        BlobKey blobKey = blobKeys.get(0);
+        BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+        if (blobInfo.getSize() != 0) {
+          ImagesService imagesService = ImagesServiceFactory.getImagesService();
+          ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+          imageURL = imagesService.getServingUrl(options);
+        } else {
+          blobstoreService.delete(blobKey);
+        }
+      }
+    } catch(IllegalStateException e) {
+      // This exception occurs when the user tries to post a reply.
+      // This happens because replies don't go through Blobstore, so the above code throws this
+      // exception. This is a bit of a hack just to fix replies, but this exception is "expected"
+      // so we aren't going to do anything other than log here.
+      // If image uploads suddenly stop working, we should take a closer look at this exception,
+      // which might be hiding other problems.
+      // We could also add upload support to replies, at which point we wouldn't need this hack.
+      System.out.println("Caught IllegalStateException in Message Servlet while uploading image." +
+          " This is probably because the user posted a reply, which doesn't support uploads.");
     }
 
     String parent = request.getParameter("parent");
