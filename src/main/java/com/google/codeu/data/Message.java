@@ -39,22 +39,16 @@ public class Message {
    * Generates a random ID and uses the current system time for the creation time.
    */
 
-
-  // public Message(String user, String text, String recipient, float sentimentScore) {
-  //   this(UUID.randomUUID(), user, text, recipient, sentimentScore, System.currentTimeMillis(), null);
-  // }
-  // public Message(String user, String text, String recipient, float sentimentScore, boolean containsImage) {
-  //   this(UUID.randomUUID(), user, text, recipient, sentimentScore, System.currentTimeMillis(), containsImage);
-  // }
-  public Message(String user, String text, String recipient, float sentimentScore, boolean containsImage) {
-    this(UUID.randomUUID(), new UUID( 0L , 0L ), user, text, recipient, sentimentScore, System.currentTimeMillis(),null, containsImage);
+   public Message(String user, String text, String recipient, float sentimentScore, String imageURL) {
+    this(UUID.randomUUID(), new UUID( 0L , 0L ), user, text, recipient, sentimentScore, System.currentTimeMillis(), imageURL);
   }
+    
   //Constructor for a reply
-  public Message(UUID parent, String user, String text, String recipient, float sentimentScore, boolean containsImage) {
-    this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis(), containsImage);
+  public Message(UUID parent, String user, String text, String recipient, float sentimentScore) {
+    this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis(), null);
   }
 
-  public Message(UUID id, UUID parent, String user, String text, String recipient, float sentimentScore, long timestamp, String imageURL, boolean containsImage) {
+  public Message(UUID id, UUID parent, String user, String text, String recipient, float sentimentScore, long timestamp, String imageURL) {
     this.id = id;
     this.parent = parent;
     this.user = user;
@@ -63,8 +57,6 @@ public class Message {
     this.sentimentScore = sentimentScore;
     this.timestamp = timestamp;
     this.imageURL = imageURL;
-    this.containsImage = containsImage;
-
   }
 
   public UUID getId() {
@@ -99,9 +91,6 @@ public class Message {
   }
   public void setImageUrl(String newImage) { 
     imageURL = newImage; 
-  }
-  public boolean getContainsImage() {
-    return containsImage;
   }
 
 }

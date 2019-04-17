@@ -16,6 +16,8 @@
 
 package com.google.codeu.servlets;
 
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
@@ -76,20 +78,20 @@ public class MessageServlet extends HttpServlet {
     }
 
     List<Message> messages;
-    
+
     String gallery = request.getParameter("gallery");
 
     boolean isGalleryRequest = (gallery != null && gallery.equals("true"));
     if (isGalleryRequest) {
       messages = datastore.getGallery(recipient);
     } else {
+      // a parentless message is a top-level post, not a reply
       if (parent == null || parent.equals("")) {
         messages = datastore.getMessages(recipient);
       } else {
         messages = datastore.getReplies(parent);
       }
     }
-
     Gson gson = new Gson();
     String json = gson.toJson(messages);
     response.getWriter().println(json);
@@ -104,7 +106,6 @@ public class MessageServlet extends HttpServlet {
       response.sendRedirect("/");
       return;
     }
-
     String username = userService.getCurrentUser().getEmail();
 
     String recipient = request.getParameter("recipient");
@@ -129,28 +130,31 @@ public class MessageServlet extends HttpServlet {
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
     String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
     float sentimentScore = getSentimentScore(result);
-    boolean containsImage = !userText.equals(textWithImagesReplaced);
+    String imageURL = null;
+
+    if(blobKeys != null && !blobKeys.isEmpty()) {
+      BlobKey blobKey = blobKeys.get(0);
+      BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+      if (blobInfo.getSize()!= 0) {
+        ImagesService imagesService = ImagesServiceFactory.getImagesService();
+        ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+        imageURL = imagesService.getServingUrl(options);
+      }else{
+        blobstoreService.delete(blobKey);
+      } 
+    }
+
     String parent = request.getParameter("parent");
 
     if (parent == null || parent.equals("")) {
-      Message message = new Message(username, result, recipient, sentimentScore, containsImage);
-      if(blobKeys != null && !blobKeys.isEmpty()) {
-        BlobKey blobKey = blobKeys.get(0);
-        ImagesService imagesService = ImagesServiceFactory.getImagesService();
-        ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-        String imageURL = imagesService.getServingUrl(options);
-        message.setImageUrl(imageURL);
-      }
+      Message message = new Message(username, result, recipient, sentimentScore, imageURL);
       datastore.storeMessage(message);
     } else {
-      Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore, containsImage);
+      Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore);
       datastore.storeReply(reply);
     }
- 
     response.sendRedirect("/users/" + recipient);
-
   }
-
   /**
    * Analyzes a message's text for its positive/negative sentiment.
    *

@@ -49,12 +49,15 @@
         </form>
       </div>
       <div id="naviposts">
-        <a href="">Posts</a> <a href="">Gallery</a>
+        <button id="posts-button" onclick="switchTab('posts')">Posts</button> <button id="gallery-button" onclick="switchTab('gallery')">Gallery</button>
       </div>
       <!--<div class="clear"></div>-->
       <div id="maincontent">
         <div id="message-container">Loading...</div>
         <hr/>
+      </div>
+      <div id="gallery" class="hidden">
+        <div id="gallery-message-container"></div>
       </div>
     </div>
   </body>
