@@ -32,8 +32,8 @@ function fetchImageUploadUrlAndShowForm() {
       })
       .then((imageUploadUrl) => {
         const messageForm = document.getElementById('message-form');
-        messageForm.classList.remove('hidden');
         messageForm.action = imageUploadUrl;
+        messageForm.classList.remove('hidden');
         document.getElementById('about-me-form').classList.remove('hidden');
         document.getElementById('commissions-toggle').classList.remove('hidden');
       });
@@ -83,9 +83,7 @@ function fetchAboutMe(){
     if(aboutMe == ''){
       aboutMe = 'Enter information about yourself.';
     }
-
     aboutMeContainer.innerHTML = aboutMe;
-
   });
 }
 
@@ -105,8 +103,8 @@ function buildMessageDiv(message) {
 
   const bodyDiv = document.createElement('div');
   if(message.imageURL){
-    bodyDiv.innerHTML += '<br/>';
-    bodyDiv.innerHTML += '<img src="' + message.imageURL + '" />';
+    message.text += "<br/>";
+    message.text += "<img src=\"" + message.imageURL + "\" />";
   }
   bodyDiv.classList.add('message-body');
   bodyDiv.innerHTML = message.text;

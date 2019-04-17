@@ -23,18 +23,20 @@ function buildMessageDiv(message){
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
   headerDiv.appendChild(document.createTextNode(
-      message.user + ' - ' + 
+      message.user + ' - ' +
       new Date(message.timestamp) +
       ' [' + message.sentimentScore + ']'));
-  
 
   const bodyDiv = document.createElement('div');
+  if(message.imageURL){
+    message.text += "<br/>";
+    message.text += "<img src=\"" + message.imageURL + "\" />";
+  }
   bodyDiv.classList.add('message-body');
   bodyDiv.innerHTML = message.text;
-  
 
   const messageDiv = document.createElement('div');
-  messageDiv.classList.add("message-div");
+  messageDiv.classList.add('message-div');
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
 

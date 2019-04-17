@@ -120,9 +120,8 @@ public class MessageServlet extends HttpServlet {
       String imageURL = imagesService.getServingUrl(options);
       message.setImageUrl(imageURL);
     }
-
     datastore.storeMessage(message);
-
+ 
     response.sendRedirect("/users/" + recipient);
 
   }

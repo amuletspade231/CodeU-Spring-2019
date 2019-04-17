@@ -27,7 +27,7 @@ public class Message {
   private String recipient;
   private long timestamp;
   private float sentimentScore;
-  private static String imageURL;
+  private String imageURL;
 
   /**
    * Constructs a new {@link Message} posted by {@code user} for {@code recipient}

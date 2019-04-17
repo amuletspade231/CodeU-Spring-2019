@@ -21,6 +21,6 @@ public class ImageUploadUrlServlet extends HttpServlet {
     String uploadUrl = blobstoreService.createUploadUrl("/messages?recipient=" + request.getParameter("recipient")) ;
 
     response.setContentType("text/html");
-    response.getOutputStream().println(uploadUrl);
+    response.getOutputStream().print(uploadUrl);
   }
 }

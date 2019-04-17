@@ -49,7 +49,6 @@ public class Datastore {
     if(message.getImageUrl() != null) {
       messageEntity.setProperty("imageURL", message.getImageUrl());
     }
-
     datastore.put(messageEntity);
   }
 
