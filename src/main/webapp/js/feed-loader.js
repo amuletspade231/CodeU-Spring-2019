@@ -24,7 +24,8 @@ function fetchReplies(message) {
   const replyThread = document.createElement('div');
   replyThread.classList.add('reply-thread');
 
-  const url = '/messages?parent=' + message.id.toString();
+  const url = '/messages?parent=' + message.id.toString()
+                      + '&recipient=' + message.user;
   fetch(url)
       .then((response) => {
         return response.json();
@@ -93,7 +94,8 @@ function buildReplyForm(message) {
   input.value = 'Submit';
 
   const replyForm = document.createElement('form');
-  replyForm.action = '/messages?parent=' + message.id.toString();
+  replyForm.action = '/messages?parent=' + message.id.toString()
+                      + '&recipient=' + message.user;
   replyForm.method = 'POST';
   replyForm.appendChild(textArea);
   replyForm.appendChild(linebreak);

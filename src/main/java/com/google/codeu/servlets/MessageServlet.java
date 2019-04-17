@@ -70,6 +70,7 @@ public class MessageServlet extends HttpServlet {
     }
 
     List<Message> messages;
+    //If there is no parent, we want regular messages. Else, we want replies.
     if (parent == null || parent.equals("")) {
       messages = datastore.getMessages(recipient);
     } else {
