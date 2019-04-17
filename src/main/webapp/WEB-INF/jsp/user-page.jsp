@@ -39,8 +39,11 @@
         </div>
         <br/>
         Compose a Post:
-        <form id="message-form" action="/messages" method="POST">
+        <form id="message-form" method="POST" class="hidden" enctype="multipart/form-data">
           <textarea name="text" id="message-input"></textarea>
+          <br/>
+          Add an image to your message:
+          <input type="file" name="image">
           <br/>
           <input type="submit" value="Submit">
         </form>

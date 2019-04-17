@@ -25,6 +25,19 @@ function setPageTitle() {
   document.title = parameterUsername + ' - User Page';
 }
 
+function fetchImageUploadUrlAndShowForm() {
+  fetch('/image-upload-url?recipient=' + parameterUsername)
+      .then((response) => {
+        return response.text();
+      })
+      .then((imageUploadUrl) => {
+        const messageForm = document.getElementById('message-form');
+        messageForm.action = imageUploadUrl;
+        messageForm.classList.remove('hidden');
+        document.getElementById('about-me-form').classList.remove('hidden');
+        document.getElementById('commissions-toggle').classList.remove('hidden');
+      });
+}
 /**
  * When the commissions toggle is clicked, sets the user's
  * isTakingCommissions attribute accordingly.
@@ -79,7 +92,6 @@ function fetchGallery() {
     });
 }
 
-
 /**
  * Shows the message form if the user is logged in.
  * Shows the about me form and commissions toggle if the user is viewing their own page.
@@ -90,18 +102,12 @@ function showMessageFormIfLoggedIn() {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn) {
-          const messageForm = document.getElementById('message-form');
-          messageForm.classList.remove('hidden');
-          messageForm.action = '/messages?recipient=' + parameterUsername;
-          if (loginStatus.username == parameterUsername) {
-            document.getElementById('about-me-form').classList.remove('hidden');
-            document.getElementById('commissions-toggle').classList.remove('hidden');
-          }
+        if (loginStatus.isLoggedIn &&
+            loginStatus.username == parameterUsername) {
+          fetchImageUploadUrlAndShowForm();
         }
       });
 }
-
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
   const url = '/messages?recipient=' + parameterUsername;
@@ -173,7 +179,6 @@ function fetchAboutMe() {
    });
  }
 
-
 /**
  * Builds an element that displays the message.
  * @param {Message} message
@@ -188,6 +193,10 @@ function buildMessageDiv(message) {
       ' [' + message.sentimentScore + ']'));
 
   const bodyDiv = document.createElement('div');
+  if(message.imageURL){
+    message.text += "<br/>";
+    message.text += "<img src=\"" + message.imageURL + "\" />";
+  }
   bodyDiv.classList.add('message-body');
   bodyDiv.innerHTML = message.text;
 

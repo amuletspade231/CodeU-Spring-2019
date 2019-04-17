@@ -53,6 +53,10 @@ function buildMessageDiv(message) {
       ' [' + message.sentimentScore + ']'));
 
   const bodyDiv = document.createElement('div');
+  if(message.imageURL){
+    message.text += "<br/>";
+    message.text += "<img src=\"" + message.imageURL + "\" />";
+  }
   bodyDiv.classList.add('message-body');
   bodyDiv.innerHTML = message.text;
 

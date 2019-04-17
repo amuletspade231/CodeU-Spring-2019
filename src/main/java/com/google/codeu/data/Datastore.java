@@ -57,9 +57,8 @@ public class Datastore {
         String recipient = (String) entity.getProperty("recipient");
         float sentimentScore = ((Double) entity.getProperty("sentimentScore")).floatValue();
         long timestamp = (long) entity.getProperty("timestamp");
-        boolean containsImage = (boolean) entity.getProperty("containsImage");
-
-        Message message = new Message(id, parent, user, text, recipient, sentimentScore, timestamp, containsImage);
+        String imageURL = (String) entity.getProperty("imageURL");
+        Message message = new Message(id, parent, user, text, recipient, sentimentScore, timestamp, imageURL);
         messages.add(message);
       } catch (Exception e) {
         System.err.println("Error reading message.");
@@ -67,7 +66,6 @@ public class Datastore {
         e.printStackTrace();
       }
     }
-
     return messages;
   }
 
@@ -80,7 +78,9 @@ public class Datastore {
     messageEntity.setProperty("recipient", message.getRecipient());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
     messageEntity.setProperty("timestamp", message.getTimestamp());
-    messageEntity.setProperty("containsImage", message.getContainsImage());
+    if(message.getImageUrl() != null) {
+      messageEntity.setProperty("imageURL", message.getImageUrl());
+    }
     datastore.put(messageEntity);
   }
 
@@ -190,7 +190,7 @@ public class Datastore {
     List<Message> gallery = new ArrayList<>();
     Query query = new Query("Message");
     query.setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient));
-    query.setFilter(new Query.FilterPredicate("containsImage", FilterOperator.EQUAL, true));
+    query.setFilter(new Query.FilterPredicate("imageURL", FilterOperator.NOT_EQUAL, null));
     query.addSort("timestamp", SortDirection.DESCENDING);
 
     PreparedQuery results = datastore.prepare(query);

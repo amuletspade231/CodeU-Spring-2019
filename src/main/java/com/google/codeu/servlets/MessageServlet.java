@@ -16,6 +16,14 @@
 
 package com.google.codeu.servlets;
 
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
+import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.blobstore.BlobstoreServiceFactory;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ImagesServiceFactory;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.cloud.language.v1.Document;
@@ -24,7 +32,6 @@ import com.google.cloud.language.v1.LanguageServiceClient;
 import com.google.cloud.language.v1.Sentiment;
 import com.google.codeu.data.Datastore;
 import com.google.codeu.data.Message;
-import com.google.codeu.data.RegexExample;
 import com.google.gson.Gson;
 
 import java.io.IOException;
@@ -38,6 +45,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.jsoup.Jsoup;
 import org.jsoup.safety.Whitelist;
+import java.util.Map;
 
 /** Handles fetching and saving {@link Message} instances. */
 @WebServlet("/messages")
@@ -84,7 +92,6 @@ public class MessageServlet extends HttpServlet {
         messages = datastore.getReplies(parent);
       }
     }
-
     Gson gson = new Gson();
     String json = gson.toJson(messages);
     response.getWriter().println(json);
@@ -99,15 +106,19 @@ public class MessageServlet extends HttpServlet {
       response.sendRedirect("/");
       return;
     }
-
     String username = userService.getCurrentUser().getEmail();
 
     String recipient = request.getParameter("recipient");
 
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
-    String regex = "(https?://\\S+\\.(png|jpg|gif))";
+    BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
 
+    Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
+
+    List<BlobKey> blobKeys = blobs.get("image");
+
+    String regex = "(https?://\\S+\\.(png|jpg|gif))";
     String replacement = "<img src=\"$1\" />";
 
     String youtube_regex = "(https://www.youtube.com/watch\\?v=(\\S*))";
@@ -119,20 +130,31 @@ public class MessageServlet extends HttpServlet {
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
     String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
     float sentimentScore = getSentimentScore(result);
-    boolean containsImage = !userText.equals(textWithImagesReplaced);
+    String imageURL = null;
+
+    if(blobKeys != null && !blobKeys.isEmpty()) {
+      BlobKey blobKey = blobKeys.get(0);
+      BlobInfo blobInfo = new BlobInfoFactory().loadBlobInfo(blobKey);
+      if (blobInfo.getSize()!= 0) {
+        ImagesService imagesService = ImagesServiceFactory.getImagesService();
+        ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
+        imageURL = imagesService.getServingUrl(options);
+      }else{
+        blobstoreService.delete(blobKey);
+      } 
+    }
+
     String parent = request.getParameter("parent");
 
     if (parent == null || parent.equals("")) {
-      Message message = new Message(username, result, recipient, sentimentScore, containsImage);
+      Message message = new Message(username, result, recipient, sentimentScore, imageURL);
       datastore.storeMessage(message);
     } else {
-      Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore, containsImage);
+      Message reply = new Message(UUID.fromString(parent), username, result, recipient, sentimentScore);
       datastore.storeReply(reply);
     }
-
     response.sendRedirect("/users/" + recipient);
   }
-
   /**
    * Analyzes a message's text for its positive/negative sentiment.
    *
