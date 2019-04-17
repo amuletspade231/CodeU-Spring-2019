@@ -38,20 +38,20 @@ public class Datastore {
     datastore = DatastoreServiceFactory.getDatastoreService();
   }
 
-  /** Stores the Message in Datastore. */
-  public void storeMessage(Message message) {
-    Entity messageEntity = new Entity("Message", message.getId().toString());
-    messageEntity.setProperty("user", message.getUser());
-    messageEntity.setProperty("text", message.getText());
-    messageEntity.setProperty("recipient", message.getRecipient());
-    messageEntity.setProperty("sentimentScore", message.getSentimentScore());
-    messageEntity.setProperty("timestamp", message.getTimestamp());
-    if(message.getImageUrl() != null) {
-      messageEntity.setProperty("imageURL", message.getImageUrl());
-    }
-
-    datastore.put(messageEntity);
-  }
+  // /** Stores the Message in Datastore. */
+  // public void storeMessage(Message message) {
+  //   Entity messageEntity = new Entity("Message", message.getId().toString());
+  //   messageEntity.setProperty("user", message.getUser());
+  //   messageEntity.setProperty("text", message.getText());
+  //   messageEntity.setProperty("recipient", message.getRecipient());
+  //   messageEntity.setProperty("sentimentScore", message.getSentimentScore());
+  //   messageEntity.setProperty("timestamp", message.getTimestamp());
+  //   if(message.getImageUrl() != null) {
+  //     messageEntity.setProperty("imageURL", message.getImageUrl());
+  //   }
+  //
+  //   datastore.put(messageEntity);
+  // }
 
 
   /**
@@ -96,7 +96,7 @@ public class Datastore {
     messageEntity.setProperty("recipient", message.getRecipient());
     messageEntity.setProperty("sentimentScore", message.getSentimentScore());
     messageEntity.setProperty("timestamp", message.getTimestamp());
-    messageEntity.setProperty("imageURL", message.getImageURL());
+    messageEntity.setProperty("imageURL", message.getImageUrl());
     datastore.put(messageEntity);
   }
 

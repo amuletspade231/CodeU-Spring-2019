@@ -38,6 +38,7 @@ function fetchImageUploadUrlAndShowForm() {
         document.getElementById('commissions-toggle').classList.remove('hidden');
       });
 }
+
 /**
  * When the commissions toggle is clicked, sets the user's
  * isTakingCommissions attribute accordingly.
@@ -240,6 +241,7 @@ function buildUI() {
   showMessageFormIfLoggedIn();
   fetchMessages();
   fetchAboutMe();
+  fetchGallery();
   fetchIsTakingCommissions();
 
 }

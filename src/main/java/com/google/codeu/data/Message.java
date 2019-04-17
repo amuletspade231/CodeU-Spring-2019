@@ -29,7 +29,7 @@ public class Message {
   private long timestamp;
   private float sentimentScore;
   private static String imageURL;
-  
+
   /**
    * Constructs a new {@link Message} posted by {@code user} for {@code recipient}
    * with {@code text} content and {@code sentimentScore} sentiment scoring of the content.
@@ -41,7 +41,7 @@ public class Message {
   public Message(String user, String text, String recipient, float sentimentScore, String imageURL) {
     this(UUID.randomUUID(), new UUID( 0L , 0L ), user, text, recipient, sentimentScore, System.currentTimeMillis(), imageURL);
   }
-    
+
   //Constructor for a reply
   public Message(UUID parent, String user, String text, String recipient, float sentimentScore) {
     this(UUID.randomUUID(), parent, user, text, recipient, sentimentScore, System.currentTimeMillis(), null);
@@ -85,13 +85,13 @@ public class Message {
   public String getRecipient() {
     return recipient;
   }
-    
-  public String getImageUrl() { 
-    return imageURL; 
+
+  public String getImageUrl() {
+    return imageURL;
   }
-    
-  public void setImageUrl(String newImage) { 
-    imageURL = newImage; 
+
+  public void setImageUrl(String newImage) {
+    imageURL = newImage;
   }
 
 }

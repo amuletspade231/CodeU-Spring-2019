@@ -113,9 +113,7 @@ public class MessageServlet extends HttpServlet {
     String userText = Jsoup.clean(request.getParameter("text"), Whitelist.none());
 
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
-
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(request);
-
     List<BlobKey> blobKeys = blobs.get("image");
 
     String regex = "(https?://\\S+\\.(png|jpg|gif))";
@@ -130,13 +128,13 @@ public class MessageServlet extends HttpServlet {
     String textWithImagesReplaced = userText.replaceAll(regex, replacement);
     String result = textWithImagesReplaced.replaceAll(youtube_regex, youtube_replacement);
     float sentimentScore = getSentimentScore(result);
-    String imageURL = null
-    
+    String imageURL = null;
+
     if(blobKeys != null && !blobKeys.isEmpty()) {
       BlobKey blobKey = blobKeys.get(0);
       ImagesService imagesService = ImagesServiceFactory.getImagesService();
       ServingUrlOptions options = ServingUrlOptions.Builder.withBlobKey(blobKey);
-      
+
       imageURL = imagesService.getServingUrl(options);
     }
 
