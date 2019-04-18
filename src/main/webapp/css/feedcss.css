@@ -1,0 +1,17 @@
+/* Remove bullet points from navigation bar. */
+#bottomcontainer{
+	margin:0px;
+	padding: 0px;
+}
+#feedname{
+	font-size: 20px;
+}
+#content{
+	margin-right: auto;
+	margin-left: auto;
+	width:950px;
+	text-align: center;
+	padding-top: 60px;
+}
+
+

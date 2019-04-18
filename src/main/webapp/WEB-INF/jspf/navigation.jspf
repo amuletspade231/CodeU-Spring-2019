@@ -1,18 +1,18 @@
 <% boolean isUserLoggedIn = (boolean) request.getAttribute("isUserLoggedIn"); %>
 <nav>
   <ul id="navigation">
-    <li><a href="/">Home</a></li>
+    <li><a style="text-decoration:none; font-size: 13px;font-family:Courier; color:#2A7B88;" href="/">Home</a></li>
 
 <%
   if (isUserLoggedIn) {
     String user = (String) request.getAttribute("user");
 %>
-    <li><a href="/users/<%= user %>">Your Page</a></li>
-    <li><a href="/feed">Public Feed</a></li>
-    <li><a href="/stats">Statistics</a></li>
-    <li><a href="/logout">Logout</a></li>
+    <li><a style="text-decoration:none; font-size: 13px;font-family:Courier; color:#2A7B88;" href="/users/<%= user %>">Your Page</a></li>
+    <li><a style="text-decoration:none; font-size: 13px;font-family:Courier; color:#2A7B88;" href="/feed">Public Feed</a></li>
+    <li><a style="text-decoration:none; font-size: 13px;font-family:Courier; color:#2A7B88;" href="/stats">Statistics</a></li>
+    <li><a style="text-decoration:none; font-size: 13px;font-family:Courier; color:#2A7B88;" href="/logout">Logout</a></li>
 <% } else {   %>
-   <li><a href="/login">Login</a></li>
+   <li><a style="text-decoration:none; font-size: 13px;font-family:Courier; color:#2A7B88;" href="/login">Login</a></li>
 <% } %>
 
   </ul>
