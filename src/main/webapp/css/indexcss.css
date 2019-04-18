@@ -1,10 +1,31 @@
+html,body{
+  margin: 0px;
+  padding: 0px;
+  border: 0px; 
+  height: 100%;
+  background-color: black;
+}
 body {
-  background-color: #b3ccff; 
-  background-image: linear-gradient(to right, #33adff, #80ccff,  #99d6ff,  #ccebff); 
+  display: block;
+  background-image: url("https://wallpaperstream.com/wallpapers/full/dark-abstract/Colorful-Shapes-Black-Background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center top;
+  height: 100%;
+  overflow: auto; 
+}
+#theblacksheet{
+  background-color: rgba(0,0,0,0.3);
+  height: 100%;
+  padding: 10px;
+  color: white;
+  overflow: auto;
 }
 
 /* Remove bullet points from navigation bar. */
 nav ul {
+  margin:0px;
+  padding: 0px;
   list-style-type: none;
   padding-left: 0;
 }
@@ -14,12 +35,12 @@ nav li {
   display: inline-block;
   margin-right: 20px
 }
-#content{
-	text-align: center;
-	font-size:17px;
-	font-family: "Comic Sans MS", cursive, sans-serif;
+h2{
+  color:#3596a5;
+  font-size: 160px;
+  position: absolute; 
+  left: 60px;
+  top: 150px;
+  width: 580px;
 }
-h1{
-	text-align: center;
-  font-family: "Comic Sans MS", cursive, sans-serif;
-}
+

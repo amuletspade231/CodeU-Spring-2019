@@ -14,19 +14,94 @@
  * limitations under the License.
  */
 
-/* Prevent the page from becoming too wide. */
-body {
-  max-width: 600px;
+html,body{
+	margin: 0px;
+  	padding: 0px;
+  	border: 0px; 
+  	height: 100%;
 }
-
+body{
+	display: block;
+  	height: 100%;
+  	overflow: auto;
+  	background-color:#3596a5;
+}
 /* Remove bullet points from navigation bar. */
 nav ul {
-  list-style-type: none;
-  padding-left: 0;
+	margin:0px;
+	padding: 0px;
+  	list-style-type: none;
+  	padding-left: 10px;
 }
-
 /* Keep navigation menu on one line. */
 nav li {
-  display: inline-block;
-  margin-right: 10px
+	display: inline-block;
+	margin-right: 20px;
+	padding-top: 20px;
+	float: left;
+}
+hr{
+	color:black;
+	height: 2px;
+	background-color:black;
+}
+#header{
+	position:-webkit-sticky;
+	position: sticky;
+	top: 0;
+}
+#headbanner{
+	display: block;
+	background-color: black;
+	overflow: auto;
+	padding-bottom: 15px;
+	text-align: center;
+	height: 50px;
+}
+#title{
+	width:350px;
+	color:#3596a5; 
+	font-size: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+#message-container{
+	margin-right: auto;
+	margin-left: auto;
+}
+.clearfloat {
+	clear: both;
+}
+/* Give each message a rounded border. */
+.message-div {
+	border: thin solid black;
+  	border-radius: 5px;
+  	margin-top: 20px;
+  	background-color: white;
+}
+
+/* Add a bottom border to the message header. */
+.message-header {
+  border-bottom: thin solid black;
+  padding: 5px;
+}
+
+/* Give the message body a margin so the text
+   isn't too close to the border. */
+.message-body {
+  margin: 5px;
+}
+
+/* Use this to hide certain elements like forms if the
+   user is not logged in or viewing their own page. */
+.hidden {
+  display: none;
+}
+#message-container, #gallery-message-container {
+  width:650px;
+}
+.message-body img {
+  display: block;
+  margin-top: 25px;
+  max-width: 500px;
 }

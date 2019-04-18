@@ -53,6 +53,10 @@ function buildMessageDiv(message) {
       ' [' + message.sentimentScore + ']'));
 
   const bodyDiv = document.createElement('div');
+  if(message.imageURL){
+    message.text += "<br/>";
+    message.text += "<img src=\"" + message.imageURL + "\" />";
+  }
   bodyDiv.classList.add('message-body');
   bodyDiv.innerHTML = message.text;
 
@@ -86,6 +90,7 @@ function buildMessageDiv(message) {
 function buildReplyForm(message) {
   const textArea = document.createElement('textarea');
   textArea.name = 'text';
+  textArea.placeholder='Add a comment...';
 
   const linebreak = document.createElement('br');
 

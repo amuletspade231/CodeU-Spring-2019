@@ -14,86 +14,16 @@
  * limitations under the License.
  */
 
-/* Set the size of the message input to be 100 pixels high
-   and will fill the width of its parent element. */
-#message-input {
-  height: 100px;
-  width: 180px;
-}
-
-/* Give each message a rounded border. */
-.message-div {
-  border: thin solid black;
-  border-radius: 5px;
-  margin-top: 20px;
-}
-
-/* Add a bottom border to the message header. */
-.message-header {
-  border-bottom: thin solid black;
-  padding: 5px;
-}
-
-/* Give the message body a margin so the text
-   isn't too close to the border. */
-.message-body {
-  margin: 5px;
-}
-
-/* Use this to hide certain elements like forms if the
-   user is not logged in or viewing their own page. */
-.hidden {
-  display: none;
-}
 #about-input{
   width: 180px;
-
-}
-#message-container{
-  width:650px;
-}
-body {
-  background-color: #e0e8ef;
-  margin:0;
-  margin-top: 0;
-}
-#dabbletitle{
-  margin:0;
-  padding: 0;
-  opacity: 1;
-  width: 200px;
-  position: relative;
-  top: -25px;
-
-}
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
 }
 #outercontainer{
   width:1000px;
   margin-left: auto;
   margin-right: auto;
 }
-#header{
-  margin:0px;
-  width: 100%;
-  background-image:url("https://cdn.trendhunterstatic.com/thumbs/3d-mural-art.jpeg"); 
-  background-size: 150px 150px;
-  height: 280px;
-}
-h1{
-  text-align: center;
-  color: black;
-  font-weight: bold;
-  margin-left: auto;
-  margin-right: auto;
-  margin:0px;
-  width: 200px;
-}
 #sidebar{
-  background-color:#e0e8ef;
+  background-color:#3596a5;
   width:200px;
   align-items: center;
   text-align: center;
@@ -104,65 +34,41 @@ h1{
   line-height: 100%;
 }
 #profilepic{
-  width:150px;
-  height: 150px;
-  border-color: #cae8f4;
+  width:200px;
+  height: 200px;
+  border-color: black;
+  background-color: black;
   border-width: 2px;
   border-style:solid;
   border-radius: 50%;
 }
-#textdir{
-  text-align: center;
-  font-size: 30px;
-  padding-top: 40px;
-}
 #maincontent{
-    background-color: white;
-    width:660px;
-    float:left;
-    padding: 15px;
-    height: 100%;
+  background-color: #3596a5;
+  padding-left: 20px;
+  float:left;
+}
+#gallery {
+  background-color: #3596a5;
+  padding-left: 20px;
+  float:left;
 }
 #naviposts{
-  background-color: white;
+  background-color: #3596a5;
   width: 900px;
   text-align: center;
-  
 }
-hr{
-  color:#cae8f4;
+/* Set the size of the message input to be 100 pixels high
+   and will fill the width of its parent element. */
+#message-input {
+  height: 30px;
+  width: 650px;
+  border: thin solid black;
+  border-radius: 5px;
 }
-#navii{
-  margin:0;
-  padding: 0;
-  position: relative;
-  width: 370px;
-  left: 1000px;
-  top:20px;
-}
-.clear{
-    clear:both;
-}
-
-/* Remove bullet points from navigation bar. */
-nav ul {
-  list-style-type: none;
-  padding-left:0px;
-}
-
-/* Keep navigation menu on one line. */
-nav li {
-  display: inline-block;
-  margin-right: 10px;
-}
-
-.message-body img {
-
-  display: block;
-
-  margin-top: 25px;
-
-  max-width: 500px;
+::placeholder{
+  /*padding-top: 10px;*/
+  margin-right: auto;
+  margin-left: auto;
 
 }
 

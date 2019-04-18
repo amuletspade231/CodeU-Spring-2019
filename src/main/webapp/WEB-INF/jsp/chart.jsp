@@ -25,7 +25,14 @@ limitations under the License.
   </head>
 
   <body onload="buildUI()">
-    <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+    <div id="header">
+      <div id="headbanner">
+        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+        <div id="title">
+          <h1>DABBLE</h1>
+        </div>
+      </div>
+    </div>
     <h1 id="page-title">Total Messages Over Time</h1>
     <div id="chart-container"></div>
   </body>

@@ -25,6 +25,19 @@ function setPageTitle() {
   document.title = parameterUsername + ' - User Page';
 }
 
+function fetchImageUploadUrlAndShowForm() {
+  fetch('/image-upload-url?recipient=' + parameterUsername)
+      .then((response) => {
+        return response.text();
+      })
+      .then((imageUploadUrl) => {
+        const messageForm = document.getElementById('message-form');
+        messageForm.action = imageUploadUrl;
+        messageForm.classList.remove('hidden');
+        document.getElementById('about-me-form').classList.remove('hidden');
+        document.getElementById('commissions-toggle').classList.remove('hidden');
+      });
+}
 /**
  * When the commissions toggle is clicked, sets the user's
  * isTakingCommissions attribute accordingly.
@@ -43,16 +56,30 @@ function setCommissions() {
 }
 
 /**
+ * Switches between displaying all posts and displaying the gallery.
+ * @param {String} tabName
+ */
+function switchTab(tabName) {
+  if (tabName == 'gallery') {
+    document.getElementById('maincontent').classList.add('hidden');
+    document.getElementById('gallery').classList.remove('hidden');
+  } else {
+    document.getElementById('gallery').classList.add('hidden');
+    document.getElementById('maincontent').classList.remove('hidden');
+  }
+}
+
+/**
  * Fetches all of the image posts made by the viewed user.
  */
 function fetchGallery() {
-  const url = "/messages?username=" + parameterUsername + "&gallery=true";
+  const url = "/messages?recipient=" + parameterUsername + "&gallery=true";
   fetch(url)
     .then((response) => {
       return response.json();
     })
     .then((messages) => {
-      const messagesContainer = document.getElementById('message-container');
+      const messagesContainer = document.getElementById('gallery-message-container');
       if (messages.length == 0) {
         messagesContainer.innerHTML = '<p>This user has no gallery posts yet.</p>';
       } else {
@@ -65,7 +92,6 @@ function fetchGallery() {
     });
 }
 
-
 /**
  * Shows the message form if the user is logged in.
  * Shows the about me form and commissions toggle if the user is viewing their own page.
@@ -76,18 +102,12 @@ function showMessageFormIfLoggedIn() {
         return response.json();
       })
       .then((loginStatus) => {
-        if (loginStatus.isLoggedIn) {
-          const messageForm = document.getElementById('message-form');
-          messageForm.classList.remove('hidden');
-          messageForm.action = '/messages?recipient=' + parameterUsername;
-          if (loginStatus.username == parameterUsername) {
-            document.getElementById('about-me-form').classList.remove('hidden');
-            document.getElementById('commissions-toggle').classList.remove('hidden');
-          }
+        if (loginStatus.isLoggedIn &&
+            loginStatus.username == parameterUsername) {
+          fetchImageUploadUrlAndShowForm();
         }
       });
 }
-
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
   const url = '/messages?recipient=' + parameterUsername;
@@ -139,7 +159,7 @@ function fetchAboutMe() {
   }).then((aboutMe) => {
     const aboutMeContainer = document.getElementById('about-me-container');
     if(aboutMe == '') {
-      aboutMe = 'Enter information about yourself.';
+      aboutMe = '';
     }
     aboutMeContainer.innerHTML = aboutMe;
   });
@@ -159,7 +179,6 @@ function fetchAboutMe() {
    });
  }
 
-
 /**
  * Builds an element that displays the message.
  * @param {Message} message
@@ -174,6 +193,10 @@ function buildMessageDiv(message) {
       ' [' + message.sentimentScore + ']'));
 
   const bodyDiv = document.createElement('div');
+  if(message.imageURL){
+    message.text += "<br/>";
+    message.text += "<img src=\"" + message.imageURL + "\" />";
+  }
   bodyDiv.classList.add('message-body');
   bodyDiv.innerHTML = message.text;
 
@@ -207,6 +230,7 @@ function buildMessageDiv(message) {
 function buildReplyForm(message) {
   const textArea = document.createElement('textarea');
   textArea.name = 'text';
+  textArea.placeholder='Add a comment...';
 
   const linebreak = document.createElement('br');
 
@@ -230,6 +254,7 @@ function buildUI() {
   setPageTitle();
   showMessageFormIfLoggedIn();
   fetchMessages();
+  fetchGallery();
   fetchAboutMe();
   fetchIsTakingCommissions();
 }
