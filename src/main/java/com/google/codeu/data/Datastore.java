@@ -93,6 +93,7 @@ public class Datastore {
     replyEntity.setProperty("recipient", reply.getRecipient());
     replyEntity.setProperty("sentimentScore", reply.getSentimentScore());
     replyEntity.setProperty("timestamp", reply.getTimestamp());
+    replyEntity.setProperty("containsImage", reply.getContainsImage());
 
     datastore.put(replyEntity);
   }

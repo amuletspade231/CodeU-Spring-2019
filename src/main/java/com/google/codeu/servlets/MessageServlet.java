@@ -63,14 +63,14 @@ public class MessageServlet extends HttpServlet {
 
     String parent = request.getParameter("parent");
 
-    if ((recipient == null || recipient.equals("")) && (parent == null || parent.equals(""))) {
+    if (recipient == null || recipient.equals("")) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
     }
 
     List<Message> messages;
-    
+
     String gallery = request.getParameter("gallery");
 
     boolean isGalleryRequest = (gallery != null && gallery.equals("true"));
@@ -81,11 +81,11 @@ public class MessageServlet extends HttpServlet {
         messages = datastore.getMessages(recipient);
       } else {
         messages = datastore.getReplies(parent);
+      }
     }
 
     Gson gson = new Gson();
     String json = gson.toJson(messages);
-    System.out.println("\n\n" + json + "\n");
     response.getWriter().println(json);
   }
 
