@@ -4,7 +4,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>CodeU Starter Project</title>
+    <title>Team 30 CodeU Starter Project</title>
     <link rel="stylesheet" href="/css/indexcss.css">
   </head>
   <body>
