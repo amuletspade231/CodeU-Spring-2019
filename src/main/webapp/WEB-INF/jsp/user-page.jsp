@@ -4,57 +4,62 @@
     <title>User Page</title>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/user-page.css">
+    <link rel="stylesheet" href="/css/main.css">
     <script src="/js/user-page-loader.js"></script>
   </head>
   <body onload="buildUI();">
     <div id="header">
-      <div id="navii"><%@include file="/WEB-INF/jspf/navigation.jspf" %></div>
-      <div id="dabbletitle">
-        <h1>DABBLE</h1>
+      <div id="headbanner">
+        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+        <div id="title">
+          <h1>DABBLE</h1>
+        </div>
       </div>
-      <p id="textdir"> Place art banner here...</p>
     </div>
+    <br/><br/><br/>
     <div id="outercontainer">
+
       <div id="sidebar">
+
         <div id="commissions-toggle" class="hidden">
           <label class="switch">
             <input type="checkbox" id="commissions-checkbox" onclick="setCommissions()">
             <span class="slider" id="commissions-slider"></span>
           </label>
         </div>
-        <img id= "profilepic" src = "http://nationalinsightnews.com/wp-content/uploads/2018/06/cat.jpg"/>
+
+        <p id= "profilepic" src=""></p>
+
         <div id="name">
-          <h3>CAT GIRLLL</h3>
           <a href="user-page.jsp" id="page-title">User Page</a>
-          <p>Official Dabble account of the World's Favorite Cat.</p>
         </div>
-        <!--<h1 id="page-title"> TITLE ME SOMTHING </h1>-->
+
         <div id="about-me-container">Loading...</div>
         <div id="about-me-form" class="hidden">
           <form action="/about" method="POST">
-            <textarea id = "about-input" name="about-me" placeholder="about me" rows=4 required></textarea>
+            <br/>
+            <textarea id = "about-input" name="about-me" placeholder="Enter your name and information about yourself" rows=4 required></textarea>
             <br/>
             <input type="submit" value="Submit">
           </form>
         </div>
-        <br/>
-        Compose a Post:
-        <form id="message-form" method="POST" class="hidden" enctype="multipart/form-data">
-          <textarea name="text" id="message-input"></textarea>
-          <br/>
-          Add an image to your message:
-          <input type="file" name="image">
-          <br/>
-          <input type="submit" value="Submit">
-        </form>
+
       </div>
+      <br/>
       <div id="naviposts">
         <button id="posts-button" onclick="switchTab('posts')">Posts</button> <button id="gallery-button" onclick="switchTab('gallery')">Gallery</button>
       </div>
-      <!--<div class="clear"></div>-->
+      <br/>
       <div id="maincontent">
-        <div id="message-container">Loading...</div>
+        <form id="message-form" method="POST" class="hidden" enctype="multipart/form-data">
+          <textarea name="text" id="message-input" placeholder="Compose a Post..."></textarea>
+          <br/>
+          Add an image to your message:
+          <input type="file" name="image"> <input type="submit" value="Submit">
+          <br/>
+        </form>
         <hr/>
+        <div id="message-container">Loading...</div>
       </div>
       <div id="gallery" class="hidden">
         <div id="gallery-message-container"></div>

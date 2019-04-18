@@ -6,7 +6,14 @@
     <script src = "js/stats-loader.js"> </script>
   </head>
   <body onload="buildUI()">
-    <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+   <div id="header">
+      <div id="headbanner">
+        <%@include file="/WEB-INF/jspf/navigation.jspf" %>
+        <div id="title">
+          <h1>DABBLE</h1>
+        </div>
+      </div>
+    </div>
     <div id="content">
       <h1>Site Statistics</h1>
       <hr/>

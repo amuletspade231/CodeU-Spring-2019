@@ -22,8 +22,5 @@
       <div id="message-container">Loading...</div>
       </div>
     </div>
-    <!-- <div class="clearfloat"></div> -->
-    
-
   </body>
 </html>

@@ -90,6 +90,7 @@ function buildMessageDiv(message) {
 function buildReplyForm(message) {
   const textArea = document.createElement('textarea');
   textArea.name = 'text';
+  textArea.placeholder='Add a comment...';
 
   const linebreak = document.createElement('br');
 

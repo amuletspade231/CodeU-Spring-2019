@@ -159,7 +159,7 @@ function fetchAboutMe() {
   }).then((aboutMe) => {
     const aboutMeContainer = document.getElementById('about-me-container');
     if(aboutMe == '') {
-      aboutMe = 'Enter information about yourself.';
+      aboutMe = '';
     }
     aboutMeContainer.innerHTML = aboutMe;
   });
@@ -230,6 +230,7 @@ function buildMessageDiv(message) {
 function buildReplyForm(message) {
   const textArea = document.createElement('textarea');
   textArea.name = 'text';
+  textArea.placeholder='Add a comment...';
 
   const linebreak = document.createElement('br');
 
