@@ -38,7 +38,7 @@
         <div id="about-me-form" class="hidden">
           <form action="/about" method="POST">
             <br/>
-            <textarea id = "about-input" name="about-me" placeholder="Enter your name and information about yourself" rows=4 required></textarea>
+            <textarea id = "about-input" name="about-me" placeholder="Enter your name &#10;and information about yourself on different lines..." rows=4 required></textarea>
             <br/>
             <input type="submit" value="Submit">
           </form>
@@ -47,12 +47,12 @@
       </div>
       <br/>
       <div id="naviposts">
-        <button id="posts-button" onclick="switchTab('posts')">Posts</button> <button id="gallery-button" onclick="switchTab('gallery')">Gallery</button>
+          <button id="posts-button" onclick="switchTab('posts')">All Posts</button> <button id="gallery-button" onclick="switchTab('gallery')">Gallery</button>
       </div>
       <br/>
       <div id="maincontent">
         <form id="message-form" method="POST" class="hidden" enctype="multipart/form-data">
-          <textarea name="text" id="message-input" placeholder="Compose a Post..."></textarea>
+          <textarea name="text" id="message-input" placeholder="Go on...Share your art&#10;Compose a text..."></textarea>
           <br/>
           Add an image to your message:
           <input type="file" name="image"> <input type="submit" value="Submit">
