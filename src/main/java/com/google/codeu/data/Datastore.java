@@ -22,6 +22,7 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.FetchOptions;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.CompositeFilterOperator;
 import com.google.appengine.api.datastore.Query.FilterOperator;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import java.util.ArrayList;
@@ -189,8 +190,9 @@ public class Datastore {
   public List<Message> getGallery(String recipient) {
     List<Message> gallery = new ArrayList<>();
     Query query = new Query("Message");
-    query.setFilter(new Query.FilterPredicate("recipient", FilterOperator.EQUAL, recipient));
-    query.setFilter(new Query.FilterPredicate("imageURL", FilterOperator.NOT_EQUAL, null));
+    query.setFilter(CompositeFilterOperator.and(
+      FilterOperator.EQUAL.of("recipient", recipient),
+      FilterOperator.NOT_EQUAL.of("imageURL", null)));
     query.addSort("imageURL");
     query.addSort("timestamp", SortDirection.DESCENDING);
 
