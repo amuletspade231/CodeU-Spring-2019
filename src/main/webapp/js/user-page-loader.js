@@ -85,7 +85,7 @@ function fetchGallery() {
       } else {
         messagesContainer.innerHTML = '';
         messages.forEach((message) => {
-          const messageDiv = buildMessageDiv(message);
+          const messageDiv = buildMessageDiv(message, "0px");
           messagesContainer.appendChild(messageDiv);
         });
       }
@@ -123,7 +123,7 @@ function fetchMessages() {
           messagesContainer.innerHTML = '';
         }
         messages.forEach((message) => {
-          const messageDiv = buildMessageDiv(message);
+          const messageDiv = buildMessageDiv(message, "0px");
           messagesContainer.appendChild(messageDiv);
         });
       });
@@ -142,7 +142,7 @@ function fetchReplies(message) {
       })
       .then((messages) => {
         messages.forEach((reply) => {
-          const replyDiv = buildMessageDiv(reply);
+          const replyDiv = buildMessageDiv(reply, "50px");
           replyThread.appendChild(replyDiv);
         });
       });
@@ -184,7 +184,7 @@ function fetchAboutMe() {
  * @param {Message} message
  * @return {Element}
  */
-function buildMessageDiv(message) {
+function buildMessageDiv(message, margin) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
   headerDiv.appendChild(document.createTextNode(
@@ -201,6 +201,7 @@ function buildMessageDiv(message) {
   bodyDiv.innerHTML = message.text;
 
   const messageDiv = document.createElement('div');
+  messageDiv.style.marginLeft = margin;
   messageDiv.classList.add('message-div');
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
