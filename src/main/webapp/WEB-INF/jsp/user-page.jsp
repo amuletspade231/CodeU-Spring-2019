@@ -56,7 +56,7 @@
           <textarea name="text" id="message-input" placeholder="Compose a Post..."></textarea>
           <br/>
           Add an image to your message:
-          <input type="file" name="image"> <input type="submit" value="Submit">
+          <input type="file" name="image"> <input type="submit" value="Post">
           <br/>
         </form>
         <hr/>

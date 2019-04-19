@@ -13,7 +13,7 @@ function fetchMessages(){
       messageContainer.innerHTML = '';
     }
     messages.forEach((message) => {
-      const messageDiv = buildMessageDiv(message);
+      const messageDiv = buildMessageDiv(message, "0px");
       messageContainer.appendChild(messageDiv);
     });
   });
@@ -32,7 +32,7 @@ function fetchReplies(message) {
       })
       .then((messages) => {
         messages.forEach((reply) => {
-          const replyDiv = buildMessageDiv(reply);
+          const replyDiv = buildMessageDiv(reply, "50px");
           replyThread.appendChild(replyDiv);
         });
       });
@@ -42,9 +42,10 @@ function fetchReplies(message) {
 /**
  * Builds an element that displays the message.
  * @param {Message} message
+ * @param {String} margin
  * @return {Element}
  */
-function buildMessageDiv(message) {
+function buildMessageDiv(message, margin) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
   headerDiv.appendChild(document.createTextNode(
@@ -61,9 +62,14 @@ function buildMessageDiv(message) {
   bodyDiv.innerHTML = message.text;
 
   const messageDiv = document.createElement('div');
+  messageDiv.style.marginLeft = margin;
   messageDiv.classList.add('message-div');
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
+
+  const replyHeaderDiv = document.createElement('div');
+  replyHeaderDiv.classList.add('message-header');
+  replyHeaderDiv.appendChild(document.createTextNode('Replies'));
 
   fetch('/login-status')
       .then((response) => {
@@ -76,6 +82,8 @@ function buildMessageDiv(message) {
         }
 
         const replyThread = fetchReplies(message);
+        if (replyThread.hasChildNodes())
+          messageDiv.appendChild(replyHeaderDiv);
         messageDiv.appendChild(replyThread);
       });
 
@@ -96,7 +104,7 @@ function buildReplyForm(message) {
 
   const input = document.createElement('input');
   input.type = 'submit';
-  input.value = 'Submit';
+  input.value = 'Comment';
 
   const replyForm = document.createElement('form');
   replyForm.action = '/messages?parent=' + message.id.toString()
