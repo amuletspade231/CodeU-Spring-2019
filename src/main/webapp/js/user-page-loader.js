@@ -236,7 +236,7 @@ function buildReplyForm(message) {
 
   const input = document.createElement('input');
   input.type = 'submit';
-  input.value = 'Reply';
+  input.value = 'Comment';
 
   const replyForm = document.createElement('form');
   replyForm.action = '/messages?parent=' + message.id.toString()

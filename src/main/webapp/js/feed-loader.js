@@ -65,6 +65,10 @@ function buildMessageDiv(message) {
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
 
+  const replyHeaderDiv = document.createElement('div');
+  replyHeaderDiv.classList.add('message-header');
+  replyHeaderDiv.appendChild(document.createTextNode('Replies'));
+
   fetch('/login-status')
       .then((response) => {
         return response.json();
@@ -76,6 +80,8 @@ function buildMessageDiv(message) {
         }
 
         const replyThread = fetchReplies(message);
+        if (replyThread.hasChildNodes())
+          messageDiv.appendChild(replyHeaderDiv);
         messageDiv.appendChild(replyThread);
       });
 
@@ -96,7 +102,7 @@ function buildReplyForm(message) {
 
   const input = document.createElement('input');
   input.type = 'submit';
-  input.value = 'Reply';
+  input.value = 'Comment';
 
   const replyForm = document.createElement('form');
   replyForm.action = '/messages?parent=' + message.id.toString()
