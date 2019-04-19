@@ -182,6 +182,7 @@ function fetchAboutMe() {
 /**
  * Builds an element that displays the message.
  * @param {Message} message
+ * @param {String} margin
  * @return {Element}
  */
 function buildMessageDiv(message, margin) {
