@@ -21,14 +21,15 @@
 
       <div id="sidebar">
 
+        <p id= "profilepic" src=""></p>
+
         <div id="commissions-toggle" class="hidden">
           <label class="switch">
             <input type="checkbox" id="commissions-checkbox" onclick="setCommissions()">
             <span class="slider" id="commissions-slider"></span>
+            <p>Taking Commissions?</p>
           </label>
         </div>
-
-        <p id= "profilepic" src=""></p>
 
         <div id="name">
           <a href="user-page.jsp" id="page-title">User Page</a>
