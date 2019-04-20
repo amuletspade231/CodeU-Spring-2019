@@ -188,10 +188,16 @@ function fetchAboutMe() {
 function buildMessageDiv(message, margin) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
-  headerDiv.appendChild(document.createTextNode(
-      message.user + ' - ' +
-      new Date(message.timestamp) +
-      ' [' + message.sentimentScore + ']'));
+
+  const userPageLink = document.createElement('a');
+  userPageLink.appendChild(document.createTextNode(message.user));
+  userPageLink.setAttribute('href', '/users/' + message.user);
+
+  headerDiv.appendChild(userPageLink);
+  headerDiv.appendChild(document.createTextNode(' - '));
+  headerDiv.appendChild(
+      document.createTextNode(new Date(message.timestamp).toLocaleString('en-US')));
+  headerDiv.appendChild(document.createTextNode(' - [Sentiment: ' + message.sentimentScore + ']'));
 
   const bodyDiv = document.createElement('div');
   if(message.imageURL){
