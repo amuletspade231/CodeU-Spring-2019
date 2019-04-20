@@ -161,7 +161,7 @@ function fetchAboutMe() {
     if(aboutMe == '') {
       aboutMe = '';
     }
-    aboutMeContainer.innerHTML = aboutMe;
+    aboutMeContainer.innerText = aboutMe;
   });
 }
 

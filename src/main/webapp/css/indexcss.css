@@ -3,7 +3,7 @@ html,body{
   padding: 0px;
   border: 0px; 
   height: 100%;
-  background-color: black;
+  background-color: black; 
 }
 body {
   display: block;
@@ -14,7 +14,7 @@ body {
   height: 100%;
   overflow: auto; 
 }
-#theblacksheet{
+#theblacksheet{ 
   background-color: rgba(0,0,0,0.3);
   height: 100%;
   padding: 10px;
@@ -27,13 +27,14 @@ nav ul {
   margin:0px;
   padding: 0px;
   list-style-type: none;
-  padding-left: 0;
+  padding-left: 10px;
 }
 
 /* Keep navigation menu on one line. */
 nav li {
   display: inline-block;
-  margin-right: 20px
+  margin-right: 20px;
+  font-size:16px;
 }
 h2{
   color:#3596a5;
@@ -42,5 +43,11 @@ h2{
   left: 60px;
   top: 150px;
   width: 580px;
+}
+#blurb{
+  color:#3596a5;
+  font-size:17px;
+  position: absolute;
+  top: 700px;
 }
 
