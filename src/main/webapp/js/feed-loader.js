@@ -1,3 +1,18 @@
+/**
+ * Toggles the reply thread of a message.
+ * @param {String} threadID
+ * @param {String} toggleID
+ * @param {String} toggleMode
+ */
+function toggleReplies(threadID, toggleID, toggleMode) {
+  if (toggleMode == "Hide Replies") {
+    document.getElementById(threadID).classList.add('hidden'); //hide replies
+    document.getElementById(toggleID).innerHTML = "Show Replies";
+  } else {
+    document.getElementById(threadID).classList.remove('hidden'); //show replies
+    document.getElementById(toggleID).innerHTML = "Hide Replies";
+  }
+}
 
 // Fetch messages and add them to the page.
 function fetchMessages(){
@@ -17,26 +32,6 @@ function fetchMessages(){
       messageContainer.appendChild(messageDiv);
     });
   });
-}
-
-/** Fetches replies and adds them to their parent message. */
-function fetchReplies(message) {
-  const replyThread = document.createElement('div');
-  replyThread.classList.add('reply-thread');
-
-  const url = '/messages?parent=' + message.id.toString()
-                      + '&recipient=' + message.user;
-  fetch(url)
-      .then((response) => {
-        return response.json();
-      })
-      .then((messages) => {
-        messages.forEach((reply) => {
-          const replyDiv = buildMessageDiv(reply, "50px");
-          replyThread.appendChild(replyDiv);
-        });
-      });
-  return replyThread;
 }
 
 /**
@@ -73,10 +68,6 @@ function buildMessageDiv(message, margin) {
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
 
-  const replyHeaderDiv = document.createElement('div');
-  replyHeaderDiv.classList.add('message-header');
-  replyHeaderDiv.appendChild(document.createTextNode('Replies'));
-
   fetch('/login-status')
       .then((response) => {
         return response.json();
@@ -88,8 +79,6 @@ function buildMessageDiv(message, margin) {
         }
 
         const replyThread = fetchReplies(message);
-        if (replyThread.hasChildNodes())
-          messageDiv.appendChild(replyHeaderDiv);
         messageDiv.appendChild(replyThread);
       });
 

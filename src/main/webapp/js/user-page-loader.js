@@ -85,11 +85,9 @@ function switchTab(tabName) {
  */
 function toggleReplies(threadID, toggleID, toggleMode) {
   if (toggleMode == "Hide Replies") {
-    console.log("Hide replies\n");
     document.getElementById(threadID).classList.add('hidden'); //hide replies
     document.getElementById(toggleID).innerHTML = "Show Replies";
   } else {
-    console.log("Show replies\n");
     document.getElementById(threadID).classList.remove('hidden'); //show replies
     document.getElementById(toggleID).innerHTML = "Hide Replies";
   }
@@ -161,7 +159,6 @@ function fetchMessages() {
  * @param {Message} message
  */
 function fetchReplies(message) {
-  console.log("fetching replies\n");
 
   //create reply thread
   const replyThread = document.createElement('div');
