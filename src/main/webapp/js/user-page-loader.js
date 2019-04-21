@@ -84,28 +84,14 @@ function switchTab(tabName) {
  * @param {String} toggleMode
  */
 function toggleReplies(threadID, toggleID, toggleMode) {
-  var replyToggle = document.getElementById(toggleID);
-
-  if (toggleMode == 'Hide Replies') {
+  if (toggleMode == "Hide Replies") {
     console.log("Hide replies\n");
-    document.getElementById(threadID).classList.add('hidden');
-    replyToggle.innerHTML = "Show Replies";
-    replyToggle.removeEventListener("click", function() {
-      toggleReplies(threadID, toggleID, "Show Replies");
-    });
-    replyToggle.addEventListener("click", function() {
-      toggleReplies(threadID, toggleID, "Hide Replies");
-    });
+    document.getElementById(threadID).classList.add('hidden'); //hide replies
+    document.getElementById(toggleID).innerHTML = "Show Replies";
   } else {
     console.log("Show replies\n");
-    document.getElementById(threadID).classList.remove('hidden');
+    document.getElementById(threadID).classList.remove('hidden'); //show replies
     document.getElementById(toggleID).innerHTML = "Hide Replies";
-    replyToggle.removeEventListener("click", function() {
-      toggleReplies(threadID, toggleID, "Hide Replies");
-    });
-    replyToggle.addEventListener("click", function() {
-      toggleReplies(threadID, toggleID, "Show Replies");
-    });
   }
 }
 
@@ -184,15 +170,16 @@ function fetchReplies(message) {
   replyThread.id = guidGenerator();
   var threadID = replyThread.id;
 
-  //create reply toggle
+  //create reply toggles
   const replyToggle = document.createElement('button');
   replyToggle.classList.add('reply-toggle');
   replyToggle.id = guidGenerator();
-  toggleID = replyToggle.id;
+  var toggleID = replyToggle.id;
   replyToggle.classList.add('hidden');
   replyToggle.innerHTML = "Show Replies";
+
   replyToggle.addEventListener("click", function() {
-    toggleReplies(threadID, toggleID, "Show Replies");
+    toggleReplies(threadID, toggleID, replyToggle.innerHTML);
   });
 
   const linebreak = document.createElement('br');
@@ -215,6 +202,7 @@ function fetchReplies(message) {
         messages.forEach((reply) => {
           if (reply.text != "") {
             replyToggle.classList.remove('hidden');
+            // repliesOff.classList.remove('hidden');
             const replyDiv = buildMessageDiv(reply, "50px");
             replyThread.appendChild(replyDiv);
           }
