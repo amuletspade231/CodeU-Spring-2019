@@ -31,8 +31,9 @@
           </label>
         </div>
 
+        <% String recipient = (String) request.getAttribute("recipient"); %>
         <div id="name">
-          <a href="user-page.jsp" id="page-title">User Page</a>
+          <a href="/users/<%= recipient %>" id="page-title">User Page</a>
         </div>
 
         <div id="about-me-container">Loading...</div>

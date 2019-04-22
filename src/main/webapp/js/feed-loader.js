@@ -1,3 +1,26 @@
+/**
+ * Toggles the reply thread of a message.
+ * @param {String} threadID
+ * @param {String} toggleID
+ * @param {String} toggleMode
+ */
+function toggleReplies(threadID, toggleID, toggleMode) {
+  if (toggleMode == "Hide Replies") {
+    document.getElementById(threadID).classList.add('hidden'); //hide replies
+    document.getElementById(toggleID).innerHTML = "Show Replies";
+  } else {
+    document.getElementById(threadID).classList.remove('hidden'); //show replies
+    document.getElementById(toggleID).innerHTML = "Hide Replies";
+  }
+}
+
+/** Generates a random GUID for HTML elements. */
+function guidGenerator() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
 
 // Fetch messages and add them to the page.
 function fetchMessages(){
@@ -19,11 +42,41 @@ function fetchMessages(){
   });
 }
 
-/** Fetches replies and adds them to their parent message. */
+/**
+ * Fetches replies and adds them to their parent message.
+ * @param {Message} message
+ */
 function fetchReplies(message) {
+
+  //create reply thread
   const replyThread = document.createElement('div');
   replyThread.classList.add('reply-thread');
+  replyThread.classList.add('hidden');
+  replyThread.id = guidGenerator();
+  var threadID = replyThread.id;
 
+  //create reply toggles
+  const replyToggle = document.createElement('button');
+  replyToggle.classList.add('reply-toggle');
+  replyToggle.id = guidGenerator();
+  var toggleID = replyToggle.id;
+  replyToggle.classList.add('hidden');
+  replyToggle.innerHTML = "Show Replies";
+
+  replyToggle.addEventListener("click", function() {
+    toggleReplies(threadID, toggleID, replyToggle.innerHTML);
+  });
+
+  const linebreak = document.createElement('br');
+
+  //create container for reply thread and toggle
+  const replyContainer = document.createElement('div');
+  replyContainer.classList.add('reply-container');
+  replyContainer.appendChild(linebreak);
+  replyContainer.appendChild(replyToggle);
+  replyContainer.appendChild(replyThread);
+
+  //actually fetching the replies
   const url = '/messages?parent=' + message.id.toString()
                       + '&recipient=' + message.user;
   fetch(url)
@@ -32,11 +85,15 @@ function fetchReplies(message) {
       })
       .then((messages) => {
         messages.forEach((reply) => {
-          const replyDiv = buildMessageDiv(reply, "50px");
-          replyThread.appendChild(replyDiv);
+          if (reply.text != "") {
+            replyToggle.classList.remove('hidden');
+            const replyDiv = buildMessageDiv(reply, "50px");
+            replyThread.appendChild(replyDiv);
+          }
         });
       });
-  return replyThread;
+
+  return replyContainer;
 }
 
 /**
@@ -73,10 +130,6 @@ function buildMessageDiv(message, margin) {
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
 
-  const replyHeaderDiv = document.createElement('div');
-  replyHeaderDiv.classList.add('message-header');
-  replyHeaderDiv.appendChild(document.createTextNode('Replies'));
-
   fetch('/login-status')
       .then((response) => {
         return response.json();
@@ -88,8 +141,6 @@ function buildMessageDiv(message, margin) {
         }
 
         const replyThread = fetchReplies(message);
-        if (replyThread.hasChildNodes())
-          messageDiv.appendChild(replyHeaderDiv);
         messageDiv.appendChild(replyThread);
       });
 
