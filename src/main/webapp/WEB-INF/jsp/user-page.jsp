@@ -21,24 +21,26 @@
 
       <div id="sidebar">
 
+        <p id= "profilepic" src=""></p>
+
         <div id="commissions-toggle" class="hidden">
           <label class="switch">
             <input type="checkbox" id="commissions-checkbox" onclick="setCommissions()">
             <span class="slider" id="commissions-slider"></span>
+            <p>Taking Commissions?</p>
           </label>
         </div>
 
-        <p id= "profilepic" src=""></p>
-
+        <% String recipient = (String) request.getAttribute("recipient"); %>
         <div id="name">
-          <a href="user-page.jsp" id="page-title">User Page</a>
+          <a href="/users/<%= recipient %>" id="page-title">User Page</a>
         </div>
 
         <div id="about-me-container">Loading...</div>
         <div id="about-me-form" class="hidden">
           <form action="/about" method="POST">
             <br/>
-            <textarea id = "about-input" name="about-me" placeholder="Enter your name and information about yourself" rows=4 required></textarea>
+            <textarea id = "about-input" name="about-me" placeholder="Enter your name &#10;and information about yourself on different lines..." rows=4 required></textarea>
             <br/>
             <input type="submit" value="Submit">
           </form>
@@ -55,10 +57,10 @@
       <br/>
       <div id="maincontent">
         <form id="message-form" method="POST" class="hidden" enctype="multipart/form-data">
-          <textarea name="text" id="message-input" placeholder="Compose a Post..."></textarea>
+          <textarea name="text" id="message-input" placeholder="Go on...Share your art&#10;Compose a text..."></textarea>
           <br/>
           Add an image to your message:
-          <input type="file" name="image"> <input type="submit" value="Submit">
+          <input type="file" name="image"> <input type="submit" value="Post">
           <br/>
         </form>
         <hr/>

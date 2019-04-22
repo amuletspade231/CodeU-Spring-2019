@@ -39,6 +39,7 @@ nav li {
 	margin-right: 20px;
 	padding-top: 20px;
 	float: left;
+	font-size: 14px;
 }
 hr{
 	color:black;
@@ -84,6 +85,19 @@ hr{
 .message-header {
   border-bottom: thin solid black;
   padding: 5px;
+}
+
+/* Username links are the same color as nav links. */
+.message-header a {
+  color: #2a7b88;
+  text-decoration: none;
+  /* When you hover, the color slowly changes. */
+  transition: color 1s;
+}
+
+/* Inverse the username link upon hover. */
+.message-header a:hover {
+  color: #d58477;
 }
 
 /* Give the message body a margin so the text

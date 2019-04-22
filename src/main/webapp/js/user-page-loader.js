@@ -19,6 +19,14 @@ const full_url = new String(window.location.href);
 var prefix = "/users/";
 var parameterUsername = full_url.substring(full_url.indexOf(prefix) + prefix.length);
 
+/** Generates a random GUID for HTML elements. */
+function guidGenerator() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
 /** Sets the page title based on the URL parameter username. */
 function setPageTitle() {
   document.getElementById('page-title').innerText = parameterUsername;
@@ -70,6 +78,22 @@ function switchTab(tabName) {
 }
 
 /**
+ * Toggles the reply thread of a message.
+ * @param {String} threadID
+ * @param {String} toggleID
+ * @param {String} toggleMode
+ */
+function toggleReplies(threadID, toggleID, toggleMode) {
+  if (toggleMode == "Hide Replies") {
+    document.getElementById(threadID).classList.add('hidden'); //hide replies
+    document.getElementById(toggleID).innerHTML = "Show Replies";
+  } else {
+    document.getElementById(threadID).classList.remove('hidden'); //show replies
+    document.getElementById(toggleID).innerHTML = "Hide Replies";
+  }
+}
+
+/**
  * Fetches all of the image posts made by the viewed user.
  */
 function fetchGallery() {
@@ -85,7 +109,7 @@ function fetchGallery() {
       } else {
         messagesContainer.innerHTML = '';
         messages.forEach((message) => {
-          const messageDiv = buildMessageDiv(message);
+          const messageDiv = buildMessageDiv(message, "0px");
           messagesContainer.appendChild(messageDiv);
         });
       }
@@ -108,6 +132,7 @@ function showMessageFormIfLoggedIn() {
         }
       });
 }
+
 /** Fetches messages and add them to the page. */
 function fetchMessages() {
   const url = '/messages?recipient=' + parameterUsername;
@@ -123,17 +148,47 @@ function fetchMessages() {
           messagesContainer.innerHTML = '';
         }
         messages.forEach((message) => {
-          const messageDiv = buildMessageDiv(message);
+          const messageDiv = buildMessageDiv(message, "0px");
           messagesContainer.appendChild(messageDiv);
         });
       });
 }
 
-/** Fetches replies and adds them to their parent message. */
+/**
+ * Fetches replies and adds them to their parent message.
+ * @param {Message} message
+ */
 function fetchReplies(message) {
+
+  //create reply thread
   const replyThread = document.createElement('div');
   replyThread.classList.add('reply-thread');
+  replyThread.classList.add('hidden');
+  replyThread.id = guidGenerator();
+  var threadID = replyThread.id;
 
+  //create reply toggles
+  const replyToggle = document.createElement('button');
+  replyToggle.classList.add('reply-toggle');
+  replyToggle.id = guidGenerator();
+  var toggleID = replyToggle.id;
+  replyToggle.classList.add('hidden');
+  replyToggle.innerHTML = "Show Replies";
+
+  replyToggle.addEventListener("click", function() {
+    toggleReplies(threadID, toggleID, replyToggle.innerHTML);
+  });
+
+  const linebreak = document.createElement('br');
+
+  //create container for reply thread and toggle
+  const replyContainer = document.createElement('div');
+  replyContainer.classList.add('reply-container');
+  replyContainer.appendChild(linebreak);
+  replyContainer.appendChild(replyToggle);
+  replyContainer.appendChild(replyThread);
+
+  //actually fetching the replies
   const url = '/messages?parent=' + message.id.toString()
                       + '&recipient=' + message.user;
   fetch(url)
@@ -142,11 +197,15 @@ function fetchReplies(message) {
       })
       .then((messages) => {
         messages.forEach((reply) => {
-          const replyDiv = buildMessageDiv(reply);
-          replyThread.appendChild(replyDiv);
+          if (reply.text != "") {
+            replyToggle.classList.remove('hidden');
+            const replyDiv = buildMessageDiv(reply, "50px");
+            replyThread.appendChild(replyDiv);
+          }
         });
       });
-  return replyThread;
+
+  return replyContainer;
 }
 
 /**
@@ -161,7 +220,7 @@ function fetchAboutMe() {
     if(aboutMe == '') {
       aboutMe = '';
     }
-    aboutMeContainer.innerHTML = aboutMe;
+    aboutMeContainer.innerText = aboutMe;
   });
 }
 
@@ -182,15 +241,22 @@ function fetchAboutMe() {
 /**
  * Builds an element that displays the message.
  * @param {Message} message
+ * @param {String} margin
  * @return {Element}
  */
-function buildMessageDiv(message) {
+function buildMessageDiv(message, margin) {
   const headerDiv = document.createElement('div');
   headerDiv.classList.add('message-header');
-  headerDiv.appendChild(document.createTextNode(
-      message.user + ' - ' +
-      new Date(message.timestamp) +
-      ' [' + message.sentimentScore + ']'));
+
+  const userPageLink = document.createElement('a');
+  userPageLink.appendChild(document.createTextNode(message.user));
+  userPageLink.setAttribute('href', '/users/' + message.user);
+
+  headerDiv.appendChild(userPageLink);
+  headerDiv.appendChild(document.createTextNode(' - '));
+  headerDiv.appendChild(
+      document.createTextNode(new Date(message.timestamp).toLocaleString('en-US')));
+  headerDiv.appendChild(document.createTextNode(' - [Sentiment: ' + message.sentimentScore + ']'));
 
   const bodyDiv = document.createElement('div');
   if(message.imageURL){
@@ -201,6 +267,7 @@ function buildMessageDiv(message) {
   bodyDiv.innerHTML = message.text;
 
   const messageDiv = document.createElement('div');
+  messageDiv.style.marginLeft = margin;
   messageDiv.classList.add('message-div');
   messageDiv.appendChild(headerDiv);
   messageDiv.appendChild(bodyDiv);
@@ -236,7 +303,7 @@ function buildReplyForm(message) {
 
   const input = document.createElement('input');
   input.type = 'submit';
-  input.value = 'Submit';
+  input.value = 'Comment';
 
   const replyForm = document.createElement('form');
   replyForm.action = '/messages?parent=' + message.id.toString()

@@ -71,7 +71,7 @@ public class MessageServlet extends HttpServlet {
 
     String parent = request.getParameter("parent");
 
-    if ((recipient == null || recipient.equals("")) && (parent == null || parent.equals(""))) {
+    if (recipient == null || recipient.equals("")) {
       // Request is invalid, return empty array
       response.getWriter().println("[]");
       return;
