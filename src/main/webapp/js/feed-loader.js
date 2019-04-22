@@ -14,6 +14,14 @@ function toggleReplies(threadID, toggleID, toggleMode) {
   }
 }
 
+/** Generates a random GUID for HTML elements. */
+function guidGenerator() {
+    var S4 = function() {
+       return (((1+Math.random())*0x10000)|0).toString(16).substring(1);
+    };
+    return (S4()+S4()+"-"+S4()+"-"+S4()+"-"+S4()+"-"+S4()+S4()+S4());
+}
+
 // Fetch messages and add them to the page.
 function fetchMessages(){
   const url = '/feed-json';
@@ -32,6 +40,60 @@ function fetchMessages(){
       messageContainer.appendChild(messageDiv);
     });
   });
+}
+
+/**
+ * Fetches replies and adds them to their parent message.
+ * @param {Message} message
+ */
+function fetchReplies(message) {
+
+  //create reply thread
+  const replyThread = document.createElement('div');
+  replyThread.classList.add('reply-thread');
+  replyThread.classList.add('hidden');
+  replyThread.id = guidGenerator();
+  var threadID = replyThread.id;
+
+  //create reply toggles
+  const replyToggle = document.createElement('button');
+  replyToggle.classList.add('reply-toggle');
+  replyToggle.id = guidGenerator();
+  var toggleID = replyToggle.id;
+  replyToggle.classList.add('hidden');
+  replyToggle.innerHTML = "Show Replies";
+
+  replyToggle.addEventListener("click", function() {
+    toggleReplies(threadID, toggleID, replyToggle.innerHTML);
+  });
+
+  const linebreak = document.createElement('br');
+
+  //create container for reply thread and toggle
+  const replyContainer = document.createElement('div');
+  replyContainer.classList.add('reply-container');
+  replyContainer.appendChild(linebreak);
+  replyContainer.appendChild(replyToggle);
+  replyContainer.appendChild(replyThread);
+
+  //actually fetching the replies
+  const url = '/messages?parent=' + message.id.toString()
+                      + '&recipient=' + message.user;
+  fetch(url)
+      .then((response) => {
+        return response.json();
+      })
+      .then((messages) => {
+        messages.forEach((reply) => {
+          if (reply.text != "") {
+            replyToggle.classList.remove('hidden');
+            const replyDiv = buildMessageDiv(reply, "50px");
+            replyThread.appendChild(replyDiv);
+          }
+        });
+      });
+
+  return replyContainer;
 }
 
 /**

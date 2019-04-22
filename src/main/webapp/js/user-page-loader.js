@@ -199,7 +199,6 @@ function fetchReplies(message) {
         messages.forEach((reply) => {
           if (reply.text != "") {
             replyToggle.classList.remove('hidden');
-            // repliesOff.classList.remove('hidden');
             const replyDiv = buildMessageDiv(reply, "50px");
             replyThread.appendChild(replyDiv);
           }
