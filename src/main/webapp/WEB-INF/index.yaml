@@ -18,5 +18,6 @@ indexes:
   - name: user
   - name: recipient
   - name: sentimentScore
+  - name: imageURL
   - name: timestamp
     direction: desc
