@@ -51,7 +51,7 @@
       <div id="naviposts">
         <label>
           <p>Viewing Mode: </p>
-          <button id="posts-button" onclick="switchTab('posts')">All Posts</button> <button id="gallery-button" onclick="switchTab('gallery')">Gallery</button>
+          <button id="posts-button" onclick="switchTab('posts')">All Posts</button> <button id="gallery-button" onclick="switchTab('gallery')">Images Only</button>
         </label>
       </div>
       <br/>
@@ -67,6 +67,9 @@
         <div id="message-container">Loading...</div>
       </div>
       <div id="gallery" class="hidden">
+        <div id="gallery-commissions" class="hidden">
+          <h2>Like what you see? This user is open to commissions!</h2>
+        </div>
         <div id="gallery-message-container"></div>
       </div>
     </div>
