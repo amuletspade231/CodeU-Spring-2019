@@ -235,6 +235,9 @@ function fetchAboutMe() {
      let commissionsToggle = document.getElementById("commissions-checkbox");
      let slider = document.getElementById("commissions-slider");
      commissionsToggle.checked = (isTakingCommissions === "true");
+     if (commissionsToggle.checked) {
+       document.getElementById("gallery-commissions").classList.remove("hidden");
+     }
    });
  }
 

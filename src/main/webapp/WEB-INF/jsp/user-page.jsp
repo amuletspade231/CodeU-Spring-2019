@@ -67,6 +67,9 @@
         <div id="message-container">Loading...</div>
       </div>
       <div id="gallery" class="hidden">
+        <div id="gallery-commissions" class="hidden">
+          <h2>Like what you see? This user is open to commissions!</h2>
+        </div>
         <div id="gallery-message-container"></div>
       </div>
     </div>
