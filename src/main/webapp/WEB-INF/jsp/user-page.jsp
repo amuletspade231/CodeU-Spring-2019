@@ -51,7 +51,7 @@
       <div id="naviposts">
         <label>
           <p>Viewing Mode: </p>
-          <button id="posts-button" onclick="switchTab('posts')">All Posts</button> <button id="gallery-button" onclick="switchTab('gallery')">Gallery</button>
+          <button id="posts-button" onclick="switchTab('posts')">All Posts</button> <button id="gallery-button" onclick="switchTab('gallery')">Images Only</button>
         </label>
       </div>
       <br/>

@@ -53,7 +53,12 @@ function fetchImageUploadUrlAndShowForm() {
 function setCommissions() {
   const checkbox = document.getElementById("commissions-checkbox");
   const url = "/commissions";
-  console.log(checkbox.checked);
+  const galleryMessage = document.getElementById("gallery-commissions");
+  if (checkbox.checked) {
+    galleryMessage.classList.remove("hidden");
+  } else {
+    galleryMessage.classList.add("hidden");
+  }
   //send a POST request to CommissionsServlet.doPost
   let bodyData = new URLSearchParams();
   bodyData.append("commissionsToggle", checkbox.checked);
